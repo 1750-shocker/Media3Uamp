@@ -31,12 +31,17 @@ class PlayerFragment : Fragment() {
     @OptIn(UnstableApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val albumId = requireArguments().getString("albumId") ?: return
-        val index = requireArguments().getInt("trackIndex")
+        var index = requireArguments().getInt("trackIndex")
         CoroutineScope(Dispatchers.Main).launch {
             val controller = PlaybackClient.getController(requireContext())
             player = controller
             val repo = CatalogRepository(requireContext())
             val tracks = repo.getTracks(albumId).map { it.toMediaItem(albumId) }
+            if (tracks.isEmpty()) {
+                android.widget.Toast.makeText(requireContext(), "该专辑暂无曲目或数据加载失败", android.widget.Toast.LENGTH_SHORT).show()
+                return@launch
+            }
+            if (index !in tracks.indices) index = 0
             controller.setMediaItems(tracks)
             controller.seekToDefaultPosition(index)
             controller.prepare()
