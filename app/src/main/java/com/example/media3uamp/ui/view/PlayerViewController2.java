@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import com.example.media3uamp.R;
 
@@ -62,6 +63,8 @@ public class PlayerViewController2 extends FrameLayout {
         ivRepeat = view.findViewById(R.id.iv_repeat);
         ivFavorite = view.findViewById(R.id.iv_favorite);
 
+        seekBar.setProgressDrawable(ContextCompat.getDrawable(getContext(), R.drawable.seekbar_style_drawables));
+
         ivPlay.setOnClickListener(v -> { if (controllerListener != null) controllerListener.onPlayToggle(); });
         ivPrevious.setOnClickListener(v -> { if (controllerListener != null) controllerListener.onPreviousClick(); });
         ivNext.setOnClickListener(v -> { if (controllerListener != null) controllerListener.onNextClick(); });
@@ -90,7 +93,7 @@ public class PlayerViewController2 extends FrameLayout {
     }
 
     public void setPlaying(boolean playing) {
-        ivPlay.setImageResource(playing ? android.R.drawable.ic_media_pause : android.R.drawable.ic_media_play);
+        ivPlay.setImageResource(playing ? R.drawable.ic_player_pause : R.drawable.ic_player_play);
     }
 
     public void setShuffle(boolean enabled) {

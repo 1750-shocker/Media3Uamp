@@ -36,7 +36,7 @@
         android:id="@+id/iv_shuffle"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@android:drawable/ic_menu_sort_alphabetically"
+        android:src="@drawable/icon_playmode_loop_list"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/seekbar" />
 
@@ -44,7 +44,7 @@
         android:id="@+id/iv_previous"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@android:drawable/ic_media_previous"
+        android:src="@drawable/icon_previous"
         app:layout_constraintStart_toEndOf="@id/iv_shuffle"
         app:layout_constraintTop_toTopOf="@id/iv_shuffle" />
 
@@ -52,7 +52,7 @@
         android:id="@+id/iv_play"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:src="@android:drawable/ic_media_play"
+        android:src="@drawable/ic_player_play"
         app:layout_constraintStart_toEndOf="@id/iv_previous"
         app:layout_constraintTop_toTopOf="@id/iv_previous" />
 
@@ -60,7 +60,7 @@
         android:id="@+id/iv_next"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@android:drawable/ic_media_next"
+        android:src="@drawable/icon_next"
         app:layout_constraintStart_toEndOf="@id/iv_play"
         app:layout_constraintTop_toTopOf="@id/iv_play" />
 
@@ -68,7 +68,7 @@
         android:id="@+id/iv_repeat"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@android:drawable/ic_menu_rotate"
+        android:src="@drawable/icon_playmode_loop_list"
         app:layout_constraintStart_toEndOf="@id/iv_next"
         app:layout_constraintTop_toTopOf="@id/iv_next" />
 
@@ -76,7 +76,7 @@
         android:id="@+id/iv_favorite"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@android:drawable/btn_star"
+        android:src="@drawable/ic_player_not_favorite"
         app:layout_constraintStart_toEndOf="@id/iv_repeat"
         app:layout_constraintTop_toTopOf="@id/iv_repeat" />
 
