@@ -22,6 +22,7 @@ class PlayerFragment : Fragment() {
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
     private var player: Player? = null
+    private var playerListener: Player.Listener? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPlayerBinding.inflate(inflater, container, false)
@@ -47,15 +48,20 @@ class PlayerFragment : Fragment() {
             controller.prepare()
             controller.play()
             updateMetadata(controller)
-            binding.timebar.setDuration(controller.duration)
-            binding.timebar.setPosition(controller.currentPosition)
-            controller.addListener(object : Player.Listener {
+            _binding?.let {
+                it.timebar.setDuration(controller.duration)
+                it.timebar.setPosition(controller.currentPosition)
+            }
+            playerListener = object : Player.Listener {
                 override fun onEvents(player: Player, events: Player.Events) {
                     updateMetadata(player)
-                    binding.timebar.setDuration(player.duration)
-                    binding.timebar.setPosition(player.currentPosition)
+                    _binding?.let { b ->
+                        b.timebar.setDuration(player.duration)
+                        b.timebar.setPosition(player.currentPosition)
+                    }
                 }
-            })
+            }
+            controller.addListener(playerListener!!)
             binding.btnPlay.setOnClickListener {
                 if (controller.isPlaying) controller.pause() else controller.play()
             }
@@ -70,13 +76,16 @@ class PlayerFragment : Fragment() {
     }
 
     private fun updateMetadata(player: Player) {
+        val b = _binding ?: return
         val md = player.mediaMetadata
-        binding.title.text = md.title ?: ""
-        binding.artist.text = md.artist ?: ""
-        md.artworkUri?.let { Glide.with(binding.cover).load(it).placeholder(com.example.media3uamp.R.drawable.album_placeholder).into(binding.cover) }
+        b.title.text = md.title ?: ""
+        b.artist.text = md.artist ?: ""
+        md.artworkUri?.let { Glide.with(b.cover).load(it).placeholder(com.example.media3uamp.R.drawable.album_placeholder).into(b.cover) }
     }
 
     override fun onDestroyView() {
+        playerListener?.let { listener -> player?.removeListener(listener) }
+        playerListener = null
         _binding = null
         super.onDestroyView()
     }
