@@ -33,48 +33,10 @@
             android:textColor="?attr/colorOnSurfaceVariant" />
     </LinearLayout>
 
-    <androidx.media3.ui.DefaultTimeBar
-        android:id="@+id/timebar"
-        android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:layout_marginTop="8dp" />
-
-    <LinearLayout
+    <com.example.media3uamp.ui.view.PlayerViewController2
+        android:id="@+id/playerController"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingTop="12dp">
-        <ImageButton
-            android:id="@+id/btn_shuffle"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@android:drawable/ic_menu_sort_alphabetically"
-            android:background="@android:color/transparent" />
-        <ImageButton
-            android:id="@+id/btn_prev"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@android:drawable/ic_media_previous"
-            android:background="@android:color/transparent" />
-        <ImageButton
-            android:id="@+id/btn_play"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:src="@android:drawable/ic_media_play"
-            android:background="@android:color/transparent" />
-        <ImageButton
-            android:id="@+id/btn_next"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@android:drawable/ic_media_next"
-            android:background="@android:color/transparent" />
-        <ImageButton
-            android:id="@+id/btn_repeat"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@android:drawable/ic_menu_rotate"
-            android:background="@android:color/transparent" />
-    </LinearLayout>
+        android:layout_marginTop="12dp" />
 
 </LinearLayout>

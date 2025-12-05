@@ -48,30 +48,26 @@ class PlayerFragment : Fragment() {
             controller.prepare()
             controller.play()
             updateMetadata(controller)
-            _binding?.let {
-                it.timebar.setDuration(controller.duration)
-                it.timebar.setPosition(controller.currentPosition)
-            }
+            _binding?.playerController?.setDurations(controller.currentPosition, controller.duration)
             playerListener = object : Player.Listener {
                 override fun onEvents(player: Player, events: Player.Events) {
                     updateMetadata(player)
-                    _binding?.let { b ->
-                        b.timebar.setDuration(player.duration)
-                        b.timebar.setPosition(player.currentPosition)
-                    }
+                    _binding?.playerController?.setDurations(player.currentPosition, player.duration)
                 }
             }
             controller.addListener(playerListener!!)
-            binding.btnPlay.setOnClickListener {
-                if (controller.isPlaying) controller.pause() else controller.play()
-            }
-            binding.btnPrev.setOnClickListener { controller.seekToPrevious() }
-            binding.btnNext.setOnClickListener { controller.seekToNext() }
-            binding.btnShuffle.setOnClickListener { controller.shuffleModeEnabled = !controller.shuffleModeEnabled }
-            binding.btnRepeat.setOnClickListener {
-                val mode = (controller.repeatMode + 1) % 3
-                controller.repeatMode = mode
-            }
+            binding.playerController.setControllerListener(object : com.example.media3uamp.ui.view.PlayerViewController2.PlayerControllerListener {
+                override fun onPlayToggle() { if (controller.isPlaying) controller.pause() else controller.play() }
+                override fun onPreviousClick() { controller.seekToPrevious() }
+                override fun onNextClick() { controller.seekToNext() }
+                override fun onShuffleToggle() { controller.shuffleModeEnabled = !controller.shuffleModeEnabled; binding.playerController.setShuffle(controller.shuffleModeEnabled) }
+                override fun onRepeatToggle() { val mode = (controller.repeatMode + 1) % 3; controller.repeatMode = mode; binding.playerController.setRepeatMode(mode) }
+                override fun onFavoriteClick() { }
+                override fun onSeekTo(progress: Int) { controller.seekTo(progress.toLong()) }
+            })
+            binding.playerController.setPlaying(controller.isPlaying)
+            binding.playerController.setShuffle(controller.shuffleModeEnabled)
+            binding.playerController.setRepeatMode(controller.repeatMode)
         }
     }
 
