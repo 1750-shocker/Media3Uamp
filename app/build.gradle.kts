@@ -65,6 +65,8 @@ dependencies {
     implementation(libs.kotlinx.coroutines.guava)
     // Images
     implementation(libs.glide)
+    // UI
+    implementation(libs.androidx.swiperefreshlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

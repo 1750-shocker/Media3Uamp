@@ -13,13 +13,18 @@ import kotlinx.coroutines.launch
 class AlbumsViewModel(app: Application) : AndroidViewModel(app) {
     private val _albums = MutableLiveData<List<MediaItem>>()
     val albums: LiveData<List<MediaItem>> = _albums
+    private val _fromNetwork = MutableLiveData<Boolean>()
+    val fromNetwork: LiveData<Boolean> = _fromNetwork
+    private val repo = CatalogRepository(getApplication())
 
-    fun load() {
+    fun load(force: Boolean = false) {
         viewModelScope.launch {
-            val repo = CatalogRepository(getApplication())
-            val albums = repo.getAlbums().map { it.toMediaItem() }
+            val albums = repo.getAlbums(force).map { it.toMediaItem() }
             _albums.value = albums
+            _fromNetwork.value = repo.wasLastLoadFromNetwork()
         }
     }
+
+    fun refresh() = load(force = true)
 }
 

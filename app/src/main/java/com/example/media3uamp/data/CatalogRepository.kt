@@ -12,17 +12,20 @@ class CatalogRepository(private val context: Context) {
     private val json = Json { ignoreUnknownKeys = true }
 
     @Volatile private var cache: Catalog? = null
+    @Volatile private var lastFromNetwork: Boolean = false
 
-    suspend fun loadCatalog(): Catalog {
-        cache?.let { return it }
-        val text = downloadOrNull(REMOTE_URL) ?: readAssetOrNull(ASSET_FILE)
+    suspend fun loadCatalog(force: Boolean = false): Catalog {
+        if (!force) cache?.let { return it }
+        val remote = downloadOrNull(REMOTE_URL)
+        lastFromNetwork = remote != null
+        val text = remote ?: readAssetOrNull(ASSET_FILE)
         val parsed = json.decodeFromString<Catalog>(text ?: "{\"music\":[]}")
         cache = parsed
         return parsed
     }
 
-    suspend fun getAlbums(): List<Album> {
-        val catalog = loadCatalog()
+    suspend fun getAlbums(force: Boolean = false): List<Album> {
+        val catalog = loadCatalog(force)
         val grouped = catalog.music.groupBy { it.album }
         return grouped.map { (albumTitle, tracks) ->
             val first = tracks.firstOrNull()
@@ -41,6 +44,9 @@ class CatalogRepository(private val context: Context) {
         val albums = getAlbums()
         return albums.firstOrNull { it.id == albumId }?.tracks ?: emptyList()
     }
+
+    fun wasLastLoadFromNetwork(): Boolean = lastFromNetwork
+    fun clearCache() { cache = null }
 
     private fun downloadOrNull(url: String): String? = try {
         val req = Request.Builder().url(url).build()
