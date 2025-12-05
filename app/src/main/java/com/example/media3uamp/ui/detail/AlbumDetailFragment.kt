@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.media3uamp.R
 import com.example.media3uamp.databinding.FragmentAlbumDetailBinding
@@ -31,6 +32,7 @@ class AlbumDetailFragment : Fragment() {
             }
             findNavController().navigate(R.id.action_to_player, args)
         }
+        binding.recycler.layoutManager = LinearLayoutManager(requireContext())
         binding.recycler.adapter = adapter
         vm.header.observe(viewLifecycleOwner) { item ->
             if (item != null) {

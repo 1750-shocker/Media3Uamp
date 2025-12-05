@@ -16,7 +16,7 @@ class CatalogRepository(private val context: Context) {
     suspend fun loadCatalog(): Catalog {
         cache?.let { return it }
         val text = downloadOrNull(REMOTE_URL) ?: readAssetOrNull(ASSET_FILE)
-        val parsed = json.decodeFromString(Catalog.serializer(), text ?: "{\"music\":[]}")
+        val parsed = json.decodeFromString<Catalog>(text ?: "{\"music\":[]}")
         cache = parsed
         return parsed
     }

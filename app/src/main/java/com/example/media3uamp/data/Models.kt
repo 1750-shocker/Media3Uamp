@@ -1,11 +1,11 @@
+@file:OptIn(kotlinx.serialization.InternalSerializationApi::class)
 package com.example.media3uamp.data
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Catalog(
-    @SerialName("music") val music: List<Track>
+    val music: List<Track>
 )
 
 @Serializable
@@ -15,10 +15,10 @@ data class Track(
     val album: String,
     val artist: String,
     val genre: String? = null,
-    @SerialName("source") val source: String,
-    @SerialName("image") val image: String,
-    @SerialName("trackNumber") val trackNumber: Int? = null,
-    @SerialName("totalTrackCount") val totalTrackCount: Int? = null,
+    val source: String,
+    val image: String,
+    val trackNumber: Int? = null,
+    val totalTrackCount: Int? = null,
     val duration: Long? = null,
     val site: String? = null,
 )

@@ -15,7 +15,7 @@ class CatalogParsingTest {
             ]}
         """.trimIndent()
         val json = Json { ignoreUnknownKeys = true }
-        val catalog = json.decodeFromString(Catalog.serializer(), jsonText)
+        val catalog = json.decodeFromString<Catalog>(jsonText)
         assertEquals(2, catalog.music.size)
         assertEquals("AlbumA", catalog.music.first().album)
     }
