@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/albumsFragment">
+
+    <fragment
+        android:id="@+id/albumsFragment"
+        android:name="com.example.media3uamp.ui.albums.AlbumsFragment"
+        android:label="专辑">
+        <action
+            android:id="@+id/action_to_albumDetail"
+            app:destination="@id/albumDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/albumDetailFragment"
+        android:name="com.example.media3uamp.ui.detail.AlbumDetailFragment"
+        android:label="专辑详情">
+        <argument
+            android:name="albumId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_to_player"
+            app:destination="@id/playerFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/playerFragment"
+        android:name="com.example.media3uamp.ui.player.PlayerFragment"
+        android:label="播放">
+        <argument android:name="albumId" app:argType="string" />
+        <argument android:name="trackIndex" app:argType="integer" />
+    </fragment>
+
+</navigation>

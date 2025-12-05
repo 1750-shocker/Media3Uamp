@@ -1,0 +1,40 @@
+{
+  "music": [
+    {
+      "id": "midnight_flight_01",
+      "title": "午夜飞行",
+      "album": "午夜飞行",
+      "artist": "星辰乐队",
+      "genre": "Pop",
+      "source": "https://storage.googleapis.com/uamp/The_Kyoto_Connection_-_Wake_Up/01_-_Intro_-_The_Way_Of_Waking_Up_feat_Alan_Watts.mp3",
+      "image": "https://storage.googleapis.com/uamp/The_Kyoto_Connection_-_Wake_Up/art.jpg",
+      "trackNumber": 1,
+      "totalTrackCount": 5,
+      "duration": 245
+    },
+    {
+      "id": "midnight_flight_02",
+      "title": "城市之光",
+      "album": "午夜飞行",
+      "artist": "星辰乐队",
+      "genre": "Pop",
+      "source": "https://storage.googleapis.com/uamp/The_Kyoto_Connection_-_Wake_Up/02_-_The_City_of_Lights.mp3",
+      "image": "https://storage.googleapis.com/uamp/The_Kyoto_Connection_-_Wake_Up/art.jpg",
+      "trackNumber": 2,
+      "totalTrackCount": 5,
+      "duration": 198
+    },
+    {
+      "id": "rock_eternity_01",
+      "title": "摇滚永恒",
+      "album": "摇滚永恒",
+      "artist": "雷鸣乐团",
+      "genre": "Rock",
+      "source": "https://storage.googleapis.com/uamp/The_Kyoto_Connection_-_Wake_Up/03_-_Rock_Eternity.mp3",
+      "image": "https://storage.googleapis.com/uamp/The_Kyoto_Connection_-_Wake_Up/art.jpg",
+      "trackNumber": 1,
+      "totalTrackCount": 5,
+      "duration": 243
+    }
+  ]
+}
