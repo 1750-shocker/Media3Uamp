@@ -29,7 +29,7 @@ class PlayerFragment : Fragment() {
         return binding.root
     }
 
-    @OptIn(UnstableApi::class)
+    @androidx.annotation.OptIn(UnstableApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val albumId = requireArguments().getString("albumId") ?: return
         var index = requireArguments().getInt("trackIndex")
@@ -60,14 +60,9 @@ class PlayerFragment : Fragment() {
                 override fun onPlayToggle() { if (controller.isPlaying) controller.pause() else controller.play() }
                 override fun onPreviousClick() { controller.seekToPrevious() }
                 override fun onNextClick() { controller.seekToNext() }
-                override fun onShuffleToggle() { controller.shuffleModeEnabled = !controller.shuffleModeEnabled; binding.playerController.setShuffle(controller.shuffleModeEnabled) }
-                override fun onRepeatToggle() { val mode = (controller.repeatMode + 1) % 3; controller.repeatMode = mode; binding.playerController.setRepeatMode(mode) }
-                override fun onFavoriteClick() { }
                 override fun onSeekTo(progress: Int) { controller.seekTo(progress.toLong()) }
             })
             binding.playerController.setPlaying(controller.isPlaying)
-            binding.playerController.setShuffle(controller.shuffleModeEnabled)
-            binding.playerController.setRepeatMode(controller.repeatMode)
         }
     }
 

@@ -21,15 +21,12 @@ public class PlayerViewController2 extends FrameLayout {
     private TextView tvCurDuration;
     private TextView tvDuration;
     private SmoothSeekbar seekBar;
-    private ImageView ivPlay, ivPrevious, ivNext, ivShuffle, ivRepeat, ivFavorite;
+    private ImageView ivPlay, ivPrevious, ivNext;
 
     public interface PlayerControllerListener {
         void onPlayToggle();
         void onPreviousClick();
         void onNextClick();
-        void onShuffleToggle();
-        void onRepeatToggle();
-        void onFavoriteClick();
         void onSeekTo(int progress);
     }
 
@@ -59,18 +56,12 @@ public class PlayerViewController2 extends FrameLayout {
         ivPlay = view.findViewById(R.id.iv_play);
         ivPrevious = view.findViewById(R.id.iv_previous);
         ivNext = view.findViewById(R.id.iv_next);
-        ivShuffle = view.findViewById(R.id.iv_shuffle);
-        ivRepeat = view.findViewById(R.id.iv_repeat);
-        ivFavorite = view.findViewById(R.id.iv_favorite);
 
         seekBar.setProgressDrawable(ContextCompat.getDrawable(getContext(), R.drawable.seekbar_style_drawables));
 
         ivPlay.setOnClickListener(v -> { if (controllerListener != null) controllerListener.onPlayToggle(); });
         ivPrevious.setOnClickListener(v -> { if (controllerListener != null) controllerListener.onPreviousClick(); });
         ivNext.setOnClickListener(v -> { if (controllerListener != null) controllerListener.onNextClick(); });
-        ivShuffle.setOnClickListener(v -> { if (controllerListener != null) controllerListener.onShuffleToggle(); });
-        ivRepeat.setOnClickListener(v -> { if (controllerListener != null) controllerListener.onRepeatToggle(); });
-        ivFavorite.setOnClickListener(v -> { if (controllerListener != null) controllerListener.onFavoriteClick(); });
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) { }
@@ -96,13 +87,7 @@ public class PlayerViewController2 extends FrameLayout {
         ivPlay.setImageResource(playing ? R.drawable.ic_player_pause : R.drawable.ic_player_play);
     }
 
-    public void setShuffle(boolean enabled) {
-        ivShuffle.setAlpha(enabled ? 1f : 0.5f);
-    }
 
-    public void setRepeatMode(int mode) {
-        ivRepeat.setAlpha(mode == 0 ? 0.5f : 1f);
-    }
 
     private String formatTime(long ms) {
         long totalSeconds = ms / 1000;
