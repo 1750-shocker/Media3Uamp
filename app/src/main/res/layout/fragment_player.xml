@@ -4,7 +4,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="?attr/colorSurface">
 
     <ImageView
         android:id="@+id/cover"
@@ -24,12 +25,12 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:textColor="#FFFFFF" />
+            android:textColor="?attr/colorOnSurface" />
         <TextView
             android:id="@+id/artist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#B0B0B0" />
+            android:textColor="?attr/colorOnSurfaceVariant" />
     </LinearLayout>
 
     <androidx.media3.ui.DefaultTimeBar

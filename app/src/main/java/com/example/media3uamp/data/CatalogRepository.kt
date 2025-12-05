@@ -27,7 +27,7 @@ class CatalogRepository(private val context: Context) {
         return grouped.map { (albumTitle, tracks) ->
             val first = tracks.firstOrNull()
             Album(
-                id = albumTitle.lowercase().replace(" ", "_"),
+                id = (albumTitle + "_" + (first?.artist ?: "")).lowercase().replace(" ", "_"),
                 title = albumTitle,
                 artist = first?.artist ?: "",
                 year = null,
