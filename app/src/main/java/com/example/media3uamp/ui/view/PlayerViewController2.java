@@ -19,7 +19,7 @@ public class PlayerViewController2 extends FrameLayout {
     private ConstraintLayout llController;
     private TextView tvCurDuration;
     private TextView tvDuration;
-    private SeekBar seekBar;
+    private SmoothSeekbar seekBar;
     private ImageView ivPlay, ivPrevious, ivNext, ivShuffle, ivRepeat, ivFavorite;
 
     public interface PlayerControllerListener {

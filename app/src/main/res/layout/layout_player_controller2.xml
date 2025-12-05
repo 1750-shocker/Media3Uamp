@@ -23,7 +23,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_current_duration" />
 
-    <SeekBar
+    <com.example.media3uamp.ui.view.SmoothSeekbar
         android:id="@+id/seekbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
