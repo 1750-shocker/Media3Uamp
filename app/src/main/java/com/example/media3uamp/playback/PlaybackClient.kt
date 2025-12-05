@@ -7,6 +7,7 @@ import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.guava.await
 
 object PlaybackClient {
     @Volatile private var browser: MediaBrowser? = null
@@ -14,8 +15,8 @@ object PlaybackClient {
 
     suspend fun getBrowser(context: Context): MediaBrowser = withContext(Dispatchers.Main) {
         browser ?: run {
-            val token = SessionToken(context, ComponentName(context, UampMediaLibraryService::class.java))
-            val b = MediaBrowser.Builder(context, token).build()
+            val token = SessionToken(context, ComponentName(context, UampMediaSessionService::class.java))
+            val b = MediaBrowser.Builder(context, token).buildAsync().await()
             browser = b
             b
         }
@@ -23,8 +24,8 @@ object PlaybackClient {
 
     suspend fun getController(context: Context): MediaController = withContext(Dispatchers.Main) {
         controller ?: run {
-            val token = SessionToken(context, ComponentName(context, UampMediaLibraryService::class.java))
-            val c = MediaController.Builder(context, token).build()
+            val token = SessionToken(context, ComponentName(context, UampMediaSessionService::class.java))
+            val c = MediaController.Builder(context, token).buildAsync().await()
             controller = c
             c
         }

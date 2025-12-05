@@ -11,9 +11,12 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.media3uamp.databinding.FragmentPlayerBinding
 import com.example.media3uamp.playback.PlaybackClient
+import com.example.media3uamp.data.CatalogRepository
+import com.example.media3uamp.data.toMediaItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.guava.await
 
 class PlayerFragment : Fragment() {
     private var _binding: FragmentPlayerBinding? = null
@@ -32,8 +35,8 @@ class PlayerFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             val controller = PlaybackClient.getController(requireContext())
             player = controller
-            val browser = PlaybackClient.getBrowser(requireContext())
-            val tracks = browser.getChildren("album:$albumId", 0, Int.MAX_VALUE).value ?: emptyList()
+            val repo = CatalogRepository(requireContext())
+            val tracks = repo.getTracks(albumId).map { it.toMediaItem(albumId) }
             controller.setMediaItems(tracks)
             controller.seekToDefaultPosition(index)
             controller.prepare()
@@ -48,13 +51,13 @@ class PlayerFragment : Fragment() {
                     binding.timebar.setPosition(player.currentPosition)
                 }
             })
-            binding.btn_play.setOnClickListener {
+            binding.btnPlay.setOnClickListener {
                 if (controller.isPlaying) controller.pause() else controller.play()
             }
-            binding.btn_prev.setOnClickListener { controller.seekToPrevious() }
-            binding.btn_next.setOnClickListener { controller.seekToNext() }
-            binding.btn_shuffle.setOnClickListener { controller.shuffleModeEnabled = !controller.shuffleModeEnabled }
-            binding.btn_repeat.setOnClickListener {
+            binding.btnPrev.setOnClickListener { controller.seekToPrevious() }
+            binding.btnNext.setOnClickListener { controller.seekToNext() }
+            binding.btnShuffle.setOnClickListener { controller.shuffleModeEnabled = !controller.shuffleModeEnabled }
+            binding.btnRepeat.setOnClickListener {
                 val mode = (controller.repeatMode + 1) % 3
                 controller.repeatMode = mode
             }

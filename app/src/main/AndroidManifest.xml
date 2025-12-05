@@ -14,11 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Media3Uamp">
         <service
-            android:name=".playback.UampMediaLibraryService"
+            android:name=".playback.UampMediaSessionService"
             android:exported="true"
             android:foregroundServiceType="mediaPlayback">
             <intent-filter>
-                <action android:name="android.media.browse.MediaBrowserService" />
+                <action android:name="androidx.media3.session.MediaSessionService" />
             </intent-filter>
         </service>
         <activity
