@@ -18,12 +18,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.guava.await
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 
 class PlayerFragment : Fragment() {
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
     private var player: Player? = null
     private var playerListener: Player.Listener? = null
+    private var progressJob: Job? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPlayerBinding.inflate(inflater, container, false)
@@ -66,6 +69,14 @@ class PlayerFragment : Fragment() {
                 override fun onSeekTo(progress: Int) { controller.seekTo(progress.toLong()) }
             })
             binding.playerController.setPlaying(controller.isPlaying)
+
+            progressJob?.cancel()
+            progressJob = CoroutineScope(Dispatchers.Main).launch {
+                while (_binding != null) {
+                    binding.playerController.setDurations(controller.currentPosition, controller.duration)
+                    delay(1000)
+                }
+            }
         }
     }
 
@@ -80,6 +91,8 @@ class PlayerFragment : Fragment() {
     override fun onDestroyView() {
         playerListener?.let { listener -> player?.removeListener(listener) }
         playerListener = null
+        progressJob?.cancel()
+        progressJob = null
         _binding = null
         super.onDestroyView()
     }

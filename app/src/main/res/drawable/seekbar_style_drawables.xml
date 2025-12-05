@@ -8,11 +8,7 @@
         <shape>
             <corners android:radius="@dimen/px_1" />
             <size android:height="@dimen/px_8" />
-            <gradient
-                android:angle="90"
-                android:centerColor="#33D0D6DD"
-                android:endColor="#33D0D6DD"
-                android:startColor="#33D0D6DD" />
+            <solid android:color="?attr/colorSurfaceVariant" />
         </shape>
     </item>
     <!--定义seekbar滑动条进度颜色-->
@@ -21,11 +17,7 @@
             <shape>
                 <corners android:radius="@dimen/px_1" />
                 <size android:height="@dimen/px_8" />
-                <gradient
-                    android:angle="90"
-                    android:centerColor="#FFFFFF"
-                    android:endColor="#FFFFFF"
-                    android:startColor="#FFFFFF" />
+                <solid android:color="?attr/colorPrimary" />
             </shape>
         </clip>
     </item>
