@@ -84,7 +84,7 @@ public class PlayerViewController2 extends FrameLayout {
     }
 
     public void setPlaying(boolean playing) {
-        ivPlay.setImageResource(playing ? R.drawable.ic_player_pause : R.drawable.ic_player_play);
+        ivPlay.setImageResource(playing ? R.drawable.ic_player_play : R.drawable.ic_player_pause);
     }
 
 

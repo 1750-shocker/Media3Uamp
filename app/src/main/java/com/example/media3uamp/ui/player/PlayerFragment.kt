@@ -13,6 +13,7 @@ import com.example.media3uamp.databinding.FragmentPlayerBinding
 import com.example.media3uamp.playback.PlaybackClient
 import com.example.media3uamp.data.CatalogRepository
 import com.example.media3uamp.data.toMediaItem
+import com.example.media3uamp.ui.view.PlayerViewController2
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,10 +54,12 @@ class PlayerFragment : Fragment() {
                 override fun onEvents(player: Player, events: Player.Events) {
                     updateMetadata(player)
                     _binding?.playerController?.setDurations(player.currentPosition, player.duration)
+                    _binding?.playerController?.setPlaying(player.isPlaying)
                 }
             }
             controller.addListener(playerListener!!)
-            binding.playerController.setControllerListener(object : com.example.media3uamp.ui.view.PlayerViewController2.PlayerControllerListener {
+            binding.playerController.setControllerListener(object :
+                PlayerViewController2.PlayerControllerListener {
                 override fun onPlayToggle() { if (controller.isPlaying) controller.pause() else controller.play() }
                 override fun onPreviousClick() { controller.seekToPrevious() }
                 override fun onNextClick() { controller.seekToNext() }
