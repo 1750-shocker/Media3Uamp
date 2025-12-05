@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.media3.common.C;
 
 import com.example.media3uamp.R;
 
@@ -77,10 +78,14 @@ public class PlayerViewController2 extends FrameLayout {
     public void setControllerListener(PlayerControllerListener listener) { this.controllerListener = listener; }
 
     public void setDurations(long currentMs, long totalMs) {
-        tvCurDuration.setText(formatTime(currentMs));
-        tvDuration.setText(formatTime(totalMs));
-        seekBar.setMax((int) totalMs);
-        seekBar.setProgress((int) currentMs);
+        long safeTotal = (totalMs == C.TIME_UNSET || totalMs <= 0) ? 0 : totalMs;
+        long safeCurrent = (currentMs == C.TIME_UNSET || currentMs < 0) ? 0 : Math.min(currentMs, safeTotal);
+        tvCurDuration.setText(formatTime(safeCurrent));
+        tvDuration.setText(safeTotal == 0 ? "--:--" : formatTime(safeTotal));
+        int max = (int) Math.min(Integer.MAX_VALUE, safeTotal);
+        int progress = (int) Math.min(max, safeCurrent);
+        seekBar.setMax(max);
+        seekBar.setProgress(progress);
     }
 
     public void setPlaying(boolean playing) {
