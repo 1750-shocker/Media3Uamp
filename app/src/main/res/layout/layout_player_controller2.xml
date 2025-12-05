@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_controller"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/px_320"
+    tools:ignore="ResourceName">
+
+    <com.example.media3uamp.ui.view.SmoothSeekbar
+        android:id="@+id/seekbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/px_112"
+        android:maxHeight="@dimen/px_30"
+        android:minHeight="@dimen/px_20"
+        android:progressDrawable="@drawable/seekbar_style_drawables"
+        android:thumb="@null"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_current_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/px_5"
+        android:maxLines="1"
+        android:text="00:00"
+        android:importantForAccessibility="no"
+        android:textColor="@color/color_current_position"
+        android:textSize="@dimen/px_28"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/seekbar" />
+
+    <TextView
+        android:id="@+id/tv_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/px_5"
+        android:maxLines="1"
+        android:text="00:00"
+        android:textColor="@color/color_current_position"
+        android:textSize="@dimen/px_28"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/seekbar" />
+
+    <com.example.media3uamp.ui.view.CustomImageViewButton
+        android:id="@+id/iv_play_mode"
+        android:layout_width="@dimen/px_72"
+        android:layout_height="@dimen/px_160"
+        android:scaleType="center"
+        tools:src="@drawable/icon_playmode_loop_list"
+        app:layout_constraintBottom_toBottomOf="@id/flPlayButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/flPlayButton" />
+
+    <com.example.media3uamp.ui.view.CustomImageViewButton
+        android:id="@+id/iv_favorite"
+        app:layout_constraintTop_toTopOf="@id/flPlayButton"
+        app:layout_constraintBottom_toBottomOf="@id/flPlayButton"
+        android:contentDescription="@string/content_description_iv_favorite"
+        app:layout_constraintLeft_toRightOf="@+id/iv_play_mode"
+        app:layout_constraintRight_toLeftOf="@+id/iv_previous"
+        android:layout_width="@dimen/px_160"
+        android:layout_height="@dimen/px_160"
+        android:padding="@dimen/px_30"
+        android:scaleType="center"
+        android:src="@drawable/ic_player_not_favorite" />
+
+    <com.example.media3uamp.ui.view.CustomImageViewButton
+        android:id="@+id/iv_previous"
+        android:layout_width="@dimen/px_72"
+        android:layout_height="@dimen/px_160"
+        android:padding="@dimen/px_30"
+        android:scaleType="center"
+        android:src="@drawable/icon_previous"
+        app:layout_constraintBottom_toBottomOf="@id/flPlayButton"
+        android:layout_marginEnd="@dimen/px_130"
+        app:layout_constraintRight_toLeftOf="@id/flPlayButton"
+        app:layout_constraintTop_toTopOf="@id/flPlayButton" />
+
+    <FrameLayout
+        android:id="@+id/flPlayButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.example.media3uamp.ui.view.CustomImageViewButton
+            android:id="@+id/iv_play"
+            android:layout_width="@dimen/px_118"
+            android:layout_height="@dimen/px_118"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_player_play"
+            android:visibility="gone" />
+
+        <com.example.media3uamp.ui.view.CustomImageViewButton
+            android:id="@+id/iv_pause"
+            android:layout_width="@dimen/px_118"
+            android:layout_height="@dimen/px_118"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_player_pause"
+            android:visibility="visible" />
+
+    </FrameLayout>
+
+    <com.example.media3uamp.ui.view.CustomImageViewButton
+        android:id="@+id/iv_next"
+        android:layout_width="@dimen/px_72"
+        android:layout_height="@dimen/px_160"
+        android:scaleType="center"
+        android:src="@drawable/icon_next"
+        android:padding="@dimen/px_30"
+        app:layout_constraintBottom_toBottomOf="@id/flPlayButton"
+        app:layout_constraintLeft_toRightOf="@id/flPlayButton"
+        android:layout_marginStart="@dimen/px_130"
+        app:layout_constraintTop_toTopOf="@id/flPlayButton" />
+
+    <com.example.media3uamp.ui.view.CustomImageViewButton
+        android:id="@+id/iv_play_list"
+        android:layout_width="@dimen/px_72"
+        android:layout_height="@dimen/px_160"
+        android:scaleType="center"
+        android:contentDescription="@string/content_Description_play_list"
+        android:src="@drawable/icon_play_list"
+        app:layout_constraintBottom_toBottomOf="@id/flPlayButton"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/flPlayButton" />
+
+    <com.example.media3uamp.ui.view.CustomImageViewButton
+        android:id="@+id/iv_sound_effect"
+        android:layout_width="@dimen/px_160"
+        android:layout_height="@dimen/px_160"
+        android:padding="@dimen/px_30"
+        android:scaleType="center"
+        android:contentDescription="@string/content_Description_iv_sound_effect"
+        app:layout_constraintBottom_toBottomOf="@id/flPlayButton"
+        android:src="@drawable/icon_sound_effect"
+        app:layout_constraintLeft_toRightOf="@id/iv_next"
+        app:layout_constraintRight_toLeftOf="@id/iv_play_list"
+        app:layout_constraintTop_toTopOf="@id/flPlayButton"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

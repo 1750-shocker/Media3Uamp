@@ -1,3 +1,260 @@
 <resources>
-    <string name="app_name">Media3Uamp</string>
+<string name="app_name">Media3Uamp</string>
+<string name="cloud_listening">Yun Ting</string>
+<string name="cloud_music">NetEase Cloud Music</string>
+<string name="radio">Radio</string>
+<string name="bluetooth_music">Bluetooth Music</string>
+<string name="usb_music">USB Music</string>
+<string name="hicar">HUAWEI HiCar</string>
+<string name="carplay">Apple Carplay</string>
+<string name="android_auto">Android Auto</string>
+<string name="carlink">ICCOA CarLink</string>
+<string name="dab">DAB</string>
+
+<string name="go_back">Previous Level</string>
+<string name="photo">Image</string>
+<string name="video">Video</string>
+<string name="unknown">Unknown</string>
+<string name="file_is_corrupt">The file is corrupted!</string>
+<string name="str_usb_unmount">Please insert a USB flash drive</string>
+<string name="str_no_content">No Content</string>
+<string name="str_loading">Scanning, please wait...</string>
+<string name="msg_already_last_one">Already the last one</string>
+<string name="msg_already_first_one">Already the first one</string>
+<string name="music_count_value">%1$d Songs</string>
+<string name="play_all">Play All</string>
+<string name="search">Search</string>
+<string name="str_search_no_content">No search results</string>
+<string name="sound_effects">Sound Effect</string>
+<string name="total_count">%1$d Songs in Total</string>
+<string name="title_singer">Singer</string>
+<string name="title_usb_singer">Singer</string>
+<string name="title_song_name">Song Name</string>
+<string name="title_duration">Duration</string>
+<string name="title_privacy">Privacy Policy</string>
+<string name="title_album">Album</string>
+<string name="usb_device_unplugged">USB drive %1$d device removed</string>
+<string name="usb_device_unplugged_all">USB device removed</string>
+<string name="usb_device_mounted">USB device inserted</string>
+<string name="usb_device_1_mounted">USB device 1 inserted</string>
+<string name="usb_device_2_mounted">USB device 2 inserted</string>
+<string name="usb_state_unmountable">Device damaged</string>
+<string name="title_all_radio">All Radios</string>
+<string name="title_favorite_radio">Favorites</string>
+<string name="stereo">Stereo</string>
+<string name="radio_fm">FM</string>
+<string name="radio_am">AM</string>
+<string name="str_scanning">Scanning...</string>
+<string name="cancel">Cancel</string>
+<string name="cancel_time">Cancel (%ds)</string>
+<string name="radio_fm_unit">MHz</string>
+<string name="radio_am_unit">kHz</string>
+<string name="radio_am_close">Show Less</string>
+<string name="radio_am_more">More</string>
+<string name="no_more_radio">No more radio</string>
+<string name="only_one_favorite_radio">There is only one radio station in the favorites list</string>
+<string name="str_usb_no_lyric" formatted="false">No lyrics</string>
+<string name="str_search_keyword_empty" formatted="false">The search content cannot be empty</string>
+
+<!-- 下拉刷新 ClassicsHeader 相关提示文字 -->
+<string name="base_refresh_header_pulling">Pull Down to Refresh</string>
+<string name="base_refresh_header_release">Release to Refresh</string>
+<string name="base_refresh_header_loading">Loading, please wait...</string>
+<string name="base_refresh_header_refreshing">Refreshing...</string>
+<string name="base_refresh_header_finish">Refresh Successful</string>
+<string name="base_refresh_header_failed">Refresh Failed</string>
+
+<!-- 上拉刷新 ClassicsFooter 相关提示文字 -->
+<string name="base_refresh_footer_pulling">Pull Up to Load More</string>
+<string name="base_refresh_footer_release">Release to Load Immediately</string>
+<string name="base_refresh_footer_loading">Loading, please wait...</string>
+<string name="base_refresh_footer_refreshing">Refreshing...</string>
+<string name="base_refresh_footer_finish">Load Completed</string>
+<string name="base_refresh_footer_failed">Load Failed</string>
+<string name="base_refresh_footer_nothing">No More Data</string>
+<string name="base_refresh_header_last_update">last update</string>
+
+<!--音效-->
+<string name="sound_effect_dts">DTS sound effects</string>
+<string name="sound_effect_adjust">Sound Effect Settings</string>
+<string name="sound_effect_fashion">Pop</string>
+<string name="sound_effect_rock">Rock</string>
+<string name="sound_effect_jazz">Jazz</string>
+<string name="sound_effect_classical">Classical</string>
+<string name="sound_effect_voice">Vocal</string>
+<string name="sound_effect_custom">Custom</string>
+<string name="sound_effect_restoration">Reset</string>
+<string name="sound_effect_reset">reset</string>
+<string name="best_seat_music_title">Best Listening Position</string>
+<string name="mode_chief_driver">Driver mode</string>
+<string name="mode_all_passengers">All passengers</string>
+<string name="dst_voice_mode_title">DTS sound mode</string>
+<string name="dst_voice_mode_title2">Sound Effect Settings</string>
+<string name="natural_sound">Natural soundtrack</string>
+<string name="clear_voice">Clear voice</string>
+<string name="mega_bass">Bass boost</string>
+<string name="mode_rest">Rest mode</string>
+<string name="custom_low">Bass</string>
+<string name="custom_mid">Mid-range</string>
+<string name="custom_high">High pitch</string>
+<string name="advanced_sound_mode">Advanced sound effect mode</string>
+<string name="sound_effect_settings">Sound effect setting</string>
+<string name="stereo_sound">Stereo</string>
+<string name="surround_sound">Surround sound</string>
+<string name="surround_sound_3d">3D surround sound</string>
+<string name="ordinary_sound">Ordinary sound effects</string>
+<string name="sound_driver_seat">Driver\'s seat</string>
+<string name="sound_front_row">Front row</string>
+<string name="sound_back_row">Back row</string>
+<string name="sound_car">Entire vehicle</string>
+<string name="sound_custom">Custom</string>
+<string name="sound_boss_position">Boss\'s position</string>
+<string name="sound_baby_mode">Baby Mode</string>
+<string name="sound_restoration">Restore audio balance to default settings?</string>
+<string name="sound_virtual_scene">Virtual scene</string>
+<string name="sound_close">OFF</string>
+<string name="sound_concert_hall">Concert Hall</string>
+<string name="sound_concert">Vocal Concert</string>
+
+<string name="sound_effect_two">2dp</string>
+<string name="sound_effect_far_one">-1dp</string>
+<string name="sound_effect_four">4dp</string>
+<string name="sound_effect_far_two">-2dp</string>
+<string name="sound_effect_zero">0dp</string>
+
+<string name="sound_effect_low">Low frequency</string>
+<string name="sound_effect_mid_low">Low and medium frequency</string>
+<string name="sound_effect_middle">Intermediate frequency</string>
+<string name="sound_effect_mid_high">Medium And High Frequency</string>
+<string name="sound_effect_high">High frequency</string>
+
+<!--音量随速补偿-->
+<string name="volume_speed_compensate">Volume Compensation with Speed</string>
+<string name="volume_speed_compensate_close">OFF</string>
+<string name="volume_speed_compensate_low">Low</string>
+<string name="volume_speed_compensate_middle">Medium</string>
+<string name="volume_speed_compensate_high">High</string>
+<string name="volume_dialog_hint">Restore all the volume to the initial value?</string>
+
+<string name="confirm">OK</string>
+<string name="base_all_category">All Categories</string>
+<string name="base_long_prise">Long press and drag to sort</string>
+<string name="base_click_classify">Click to enter category</string>
+<string name="base_edit">Edit</string>
+<string name="base_save">Save</string>
+<string name="str_radio_no_content">No favorite album/smart radio</string>
+<string name="collected_radio_is_full">Stations full</string>
+<string name="play_list">Playlist</string>
+<string name="usb_device_not_supported">Device not supported</string>
+<string name="str_radio_no_favorite_content">No favorite station</string>
+<string name="base_more">More</string>
+<string name="no_more">—— No More ——</string>
+
+<string name="title_audio_book_singer">Streamer</string>
+<string name="title_audio_book_album">Column</string>
+
+<!--    音效 可见即可说-->
+<string name="content_Description_iv_sound_effect">Sound Effect#Equalizer</string>
+<string name="content_Description_play_list">Playlist#Song List#List#Open List#Close List</string>
+<string name="content_Description_Screen">Lyrics screen casting#Screen casting#Open screen casting#Close screen casting</string>
+
+<string name="content_Description_iv_previous">Previous#Previous song#Previous channel</string>
+<string name="content_Description_iv_next">Next#Next song#Next channel</string>
+<string name="content_Description_tv_history_delete">Delete</string>
+<string name="content_description_iv_play_mode">Single Loop#Random Play#Sequential Play#List Loop</string>
+<string name="content_description_iv_favorite">Favorite#Cancel Favorite#Add Favorite</string>
+<string name="content_description_iv_favorite_add">Favorite#Add Favorite</string>
+<string name="content_description_iv_favorite_remove">Remove from favorites</string>
+<string name="content_description_iv_favorite_radio_add">Favorite#Add Favorite</string>
+<string name="content_description_delete">Delete#Clear History#Delete History#Clear Search History#Delete Search History</string>
+
+<string name="radio_announcement_type">Announcement type</string>
+<string name="radio_rds_af_setting">RDS Setting</string>
+
+<!-- below for dab -->
+<string name="dab_title_all">ALL</string>
+<string name="dab_title_collect">Favorites</string>
+<string name="dab_title_epg">EPG</string>
+<string name="dab_title_pty">PTY</string>
+<string name="dab_text_play">Play</string>
+<string name="dab_station_name">Radio Name</string>
+<string name="dab_unknow_radio">Unknown</string>
+<string name="dab_announcement_close">OFF</string>
+<string name="dab_settings">DAB Setting</string>
+<string name="dab_announcement_type">Announcement Type</string>
+<string name="dab_service_following">Service Following</string>
+<string name="dab_announcement_dialog_cancel">Cancel</string>
+<string name="dab_discover_dialog_title">A new DAB station is found. Play it now?</string>
+<string name="dab_subscribe_dialog_title1">Your reserved program</string>
+<string name="dab_subscribe_dialog_title3">is about to start. Play it now?</string>
+<string name="dab_pty_no_use">Please start PTY first\nIt can be turned off in Settings</string>
+<string name="dab_subscribe_success">Reservation Successfully</string>
+<string name="dab_subscribe_cancel">Reservation canceled</string>
+
+<string name="base_refresh">Refresh</string>
+<string name="base_refresh_loading">Loading...</string>
+<string name="base_audio_book">Audiobook</string>
+
+<!-- 自定义角标无障碍语术 -->
+<string name="arrow_content_escription">%d</string>
+
+<string-array name="dab_announcement_type">
+    <item>Alarm</item>
+    <item>Road Traffic Flash</item>
+    <item>Transport Flash</item>
+    <item>Warning/Service</item>
+    <item>News Flash</item>
+    <item>Area Weather Flash</item>
+    <item>Event Announcement</item>
+    <item>Special Event</item>
+    <item>Program Information</item>
+    <item>Sport Report</item>
+    <item>Financial Report</item>
+</string-array>
+
+<string-array name="dab_announcement_title">
+    <item>Alarm Radio</item>
+    <item>Warning/Service Radio</item>
+    <item>Road Traffic Flash Radio</item>
+    <item>Area Weather Flash Radio</item>
+    <item>News Flash Radio</item>
+    <item>Event Announcement Radio</item>
+    <item>Sport Report Radio</item>
+    <item>Other Radio</item>
+</string-array>
+
+<string-array name="dab_rds_pty_type_list">
+    <item>News</item>
+    <item>Current Affairs</item>
+    <item>Information</item>
+    <item>Sport</item>
+    <item>Education</item>
+    <item>Drama</item>
+    <item>Culture</item>
+    <item>Science</item>
+    <item>Varied</item>
+    <item>Pop Music</item>
+    <item>Rock Music</item>
+    <item>Easy Listening</item>
+    <item>Light Classical</item>
+    <item>Serious Classical</item>
+    <item>Other Music</item>
+    <item>Weather</item>
+    <item>Finance</item>
+    <item>Children\'s Programmes</item>
+    <item>Social Affairs</item>
+    <item>Religion</item>
+    <item>Phone-In</item>
+    <item>Travel</item>
+    <item>Leisure</item>
+    <item>Jazzy Music</item>
+    <item>Country Music</item>
+    <item>Nation Music</item>
+    <item>Oldies Music</item>
+    <item>Folk Music</item>
+    <item>Documentary</item>
+    <item>Alarm test</item>
+    <item>Alarm</item>
+</string-array>
+<!-- end of dab -->
 </resources>
