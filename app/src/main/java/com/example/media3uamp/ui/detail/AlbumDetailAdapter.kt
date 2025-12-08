@@ -26,7 +26,8 @@ class AlbumDetailAdapter(private val onClick: (index: Int, item: MediaItem) -> U
             binding.index.text = (index + 1).toString()
             binding.title.text = md.title ?: ""
             binding.artist.text = md.artist ?: ""
-            binding.duration.text = "" // 无准确时长，留空
+            val sec = md.extras?.getInt("durationSec") ?: 0
+            binding.duration.text = formatDuration(sec)
             binding.card.setOnClickListener { onClick(index, item) }
         }
     }
@@ -38,6 +39,12 @@ class AlbumDetailAdapter(private val onClick: (index: Int, item: MediaItem) -> U
 
             override fun areContentsTheSame(oldItem: MediaItem, newItem: MediaItem): Boolean =
                 oldItem == newItem
+        }
+
+        private fun formatDuration(totalSec: Int): String {
+            val m = totalSec / 60
+            val s = totalSec % 60
+            return String.format("%d:%02d", m, s)
         }
     }
 }

@@ -3,6 +3,7 @@ package com.example.media3uamp.data
 import android.net.Uri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
+import android.os.Bundle
 
 private fun safeUri(s: String?): Uri? {
     if (s.isNullOrBlank()) return null
@@ -11,12 +12,18 @@ private fun safeUri(s: String?): Uri? {
 }
 
 fun Track.toMediaItem(albumId: String): MediaItem {
-    val metadata = MediaMetadata.Builder()
+    val metadataBuilder = MediaMetadata.Builder()
         .setTitle(title)
         .setArtist(artist)
         .setAlbumTitle(album)
         .setArtworkUri(safeUri(image))
-        .build()
+        .setTrackNumber(trackNumber ?: 0)
+        .setTotalTrackCount(totalTrackCount ?: 0)
+    val extras = Bundle().apply {
+        putInt("durationSec", (duration ?: 0L).toInt())
+    }
+    metadataBuilder.setExtras(extras)
+    val metadata = metadataBuilder.build()
     return MediaItem.Builder()
         .setMediaId("track:$id")
         .setUri(safeUri(source))
