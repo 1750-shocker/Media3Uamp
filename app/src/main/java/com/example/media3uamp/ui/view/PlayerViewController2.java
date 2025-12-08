@@ -3,6 +3,7 @@ package com.example.media3uamp.ui.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -64,6 +65,10 @@ public class PlayerViewController2 extends FrameLayout {
         ivPrevious.setOnClickListener(v -> { if (controllerListener != null) controllerListener.onPreviousClick(); });
         ivNext.setOnClickListener(v -> { if (controllerListener != null) controllerListener.onNextClick(); });
 
+        applyScale(ivPlay);
+        applyScale(ivPrevious);
+        applyScale(ivNext);
+
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) { }
             @Override public void onStartTrackingTouch(SeekBar seekBar) { }
@@ -99,5 +104,28 @@ public class PlayerViewController2 extends FrameLayout {
         long minutes = totalSeconds / 60;
         long seconds = totalSeconds % 60;
         return String.format("%d:%02d", minutes, seconds);
+    }
+
+    public static void applyScale(View view) {
+        applyScale(view, 0.9f, 100);
+    }
+
+    public static void applyScale(View view, final float scale, final int duration) {
+        view.setClickable(true);
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        v.animate().scaleX(scale).scaleY(scale).setDuration(duration).start();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        v.animate().scaleX(1f).scaleY(1f).setDuration(duration).start();
+                        break;
+                }
+                return false;
+            }
+        });
     }
 }
