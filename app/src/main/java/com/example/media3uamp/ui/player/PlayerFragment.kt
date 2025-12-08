@@ -1,6 +1,8 @@
 package com.example.media3uamp.ui.player
 
 import android.os.Bundle
+import android.animation.ObjectAnimator
+import android.view.animation.LinearInterpolator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +29,7 @@ class PlayerFragment : Fragment() {
     private var player: Player? = null
     private var playerListener: Player.Listener? = null
     private var progressJob: Job? = null
+    private var coverAnimator: ObjectAnimator? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPlayerBinding.inflate(inflater, container, false)
@@ -35,6 +38,7 @@ class PlayerFragment : Fragment() {
 
     @androidx.annotation.OptIn(UnstableApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        initCoverAnimator()
         val albumId = requireArguments().getString("albumId") ?: return
         var index = requireArguments().getInt("trackIndex")
         CoroutineScope(Dispatchers.Main).launch {
@@ -53,17 +57,19 @@ class PlayerFragment : Fragment() {
             controller.play()
             updateMetadata(controller)
             _binding?.playerController?.setDurations(controller.currentPosition, controller.duration)
+            updateCoverRotation(controller.isPlaying)
             playerListener = object : Player.Listener {
                 override fun onEvents(player: Player, events: Player.Events) {
                     updateMetadata(player)
                     _binding?.playerController?.setDurations(player.currentPosition, player.duration)
                     _binding?.playerController?.setPlaying(player.isPlaying)
+                    updateCoverRotation(player.isPlaying)
                 }
             }
             controller.addListener(playerListener!!)
             binding.playerController.setControllerListener(object :
                 PlayerViewController2.PlayerControllerListener {
-                override fun onPlayToggle() { if (controller.isPlaying) controller.pause() else controller.play() }
+                override fun onPlayToggle() { if (controller.isPlaying) controller.pause() else controller.play(); updateCoverRotation(controller.isPlaying) }
                 override fun onPreviousClick() { controller.seekToPrevious() }
                 override fun onNextClick() { controller.seekToNext() }
                 override fun onSeekTo(progress: Int) { controller.seekTo(progress.toLong()) }
@@ -80,15 +86,36 @@ class PlayerFragment : Fragment() {
         }
     }
 
+    private fun initCoverAnimator() {
+        if (coverAnimator == null) {
+            coverAnimator = ObjectAnimator.ofFloat(binding.cover, "rotation", 0f, 360f)
+            coverAnimator?.duration = 20000
+            coverAnimator?.interpolator = LinearInterpolator()
+            coverAnimator?.repeatCount = ObjectAnimator.INFINITE
+            coverAnimator?.repeatMode = ObjectAnimator.RESTART
+        }
+    }
+
+    private fun updateCoverRotation(isPlaying: Boolean) {
+        val animator = coverAnimator ?: return
+        if (isPlaying) {
+            if (!animator.isStarted) animator.start() else animator.resume()
+        } else {
+            if (animator.isRunning) animator.pause()
+        }
+    }
+
     private fun updateMetadata(player: Player) {
         val b = _binding ?: return
         val md = player.mediaMetadata
         b.title.text = md.title ?: ""
         b.artist.text = md.artist ?: ""
-        md.artworkUri?.let { Glide.with(b.cover).load(it).placeholder(com.example.media3uamp.R.drawable.album_placeholder).into(b.cover) }
+        md.artworkUri?.let { Glide.with(b.cover).load(it).circleCrop().placeholder(com.example.media3uamp.R.drawable.album_placeholder).into(b.cover) }
     }
 
     override fun onDestroyView() {
+        coverAnimator?.cancel()
+        coverAnimator = null
         playerListener?.let { listener -> player?.removeListener(listener) }
         playerListener = null
         progressJob?.cancel()
