@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.media3uamp.R
@@ -23,10 +24,15 @@ class AlbumsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        adapter = AlbumsAdapter { album ->
+        adapter = AlbumsAdapter { album, cover, title, artist ->
             val albumId = album.mediaId.substringAfter(":")
             val action = R.id.action_to_albumDetail
-            findNavController().navigate(action, Bundle().apply { putString("albumId", albumId) })
+            val extras = FragmentNavigatorExtras(
+                cover to "album_${albumId}_cover",
+                title to "album_${albumId}_title",
+                artist to "album_${albumId}_artist",
+            )
+            findNavController().navigate(action, Bundle().apply { putString("albumId", albumId) }, null, extras)
         }
         binding.recycler.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.recycler.adapter = adapter
