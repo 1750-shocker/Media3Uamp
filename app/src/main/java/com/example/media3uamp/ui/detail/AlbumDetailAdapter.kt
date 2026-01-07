@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.media3uamp.databinding.ItemTrackBinding
+import java.util.Locale
 
 class AlbumDetailAdapter(private val onClick: (index: Int, item: MediaItem) -> Unit) :
     ListAdapter<MediaItem, AlbumDetailAdapter.VH>(DIFF) {
@@ -44,7 +45,7 @@ class AlbumDetailAdapter(private val onClick: (index: Int, item: MediaItem) -> U
         private fun formatDuration(totalSec: Int): String {
             val m = totalSec / 60
             val s = totalSec % 60
-            return String.format("%d:%02d", m, s)
+            return String.format(Locale.US, "%d:%02d", m, s)
         }
     }
 }

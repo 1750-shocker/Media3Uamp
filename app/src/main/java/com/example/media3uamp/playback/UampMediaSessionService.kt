@@ -20,7 +20,7 @@ class UampMediaSessionService : MediaSessionService() {
         createNotificationChannel()
     }
 
-    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? = session
+    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession = session
 
     override fun onDestroy() {
         session.release()

@@ -9,17 +9,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.media3uamp.databinding.FragmentPlayerBinding
 import com.example.media3uamp.playback.PlaybackClient
 import com.example.media3uamp.data.CatalogRepository
 import com.example.media3uamp.data.toMediaItem
-import com.example.media3uamp.ui.view.PlayerViewController2
+import com.example.media3uamp.ui.view.PlayerViewController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 
@@ -68,7 +66,7 @@ class PlayerFragment : Fragment() {
             }
             controller.addListener(playerListener!!)
             binding.playerController.setControllerListener(object :
-                PlayerViewController2.PlayerControllerListener {
+                PlayerViewController.PlayerControllerListener {
                 override fun onPlayToggle() { if (controller.isPlaying) controller.pause() else controller.play(); updateCoverRotation(controller.isPlaying) }
                 override fun onPreviousClick() { controller.seekToPrevious() }
                 override fun onNextClick() { controller.seekToNext() }

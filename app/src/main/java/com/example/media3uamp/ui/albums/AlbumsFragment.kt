@@ -35,13 +35,13 @@ class AlbumsFragment : Fragment() {
             adapter.submitList(it)
             binding.swipeRefresh.isRefreshing = false
         }
-        /*vm.fromNetwork.observe(viewLifecycleOwner) { fromNet ->
+        vm.fromNetwork.observe(viewLifecycleOwner) { fromNet ->
             if (fromNet == true) {
                 android.widget.Toast.makeText(requireContext(), "已加载远程数据", android.widget.Toast.LENGTH_SHORT).show()
             } else {
                 android.widget.Toast.makeText(requireContext(), "当前使用本地兜底数据，请检查网络", android.widget.Toast.LENGTH_SHORT).show()
             }
-        }*/
+        }
         vm.load()
     }
 

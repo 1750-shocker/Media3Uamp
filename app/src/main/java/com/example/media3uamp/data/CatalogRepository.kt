@@ -13,7 +13,8 @@ import java.io.InputStreamReader
 
 class CatalogRepository(private val context: Context) {
     private val client = OkHttpClient.Builder()
-        .addInterceptor(HttpLoggingInterceptor { msg -> Log.d("wzhhh", msg) }.apply { level = HttpLoggingInterceptor.Level.BASIC })
+        .addInterceptor(HttpLoggingInterceptor { msg -> Log.d(TAG, msg) }
+            .apply { level = HttpLoggingInterceptor.Level.BASIC })
         .build()
     private val json = Json { ignoreUnknownKeys = true }
 
@@ -22,11 +23,11 @@ class CatalogRepository(private val context: Context) {
 
     suspend fun loadCatalog(force: Boolean = false): Catalog = withContext(Dispatchers.IO) {
         if (!force) cache?.let { return@withContext it }
-        Log.d("wzhhh", "start loadCatalog force=$force")
+        Log.d(TAG, "start loadCatalog force=$force")
         val remote = downloadOrNull(REMOTE_URL)
         lastFromNetwork = remote != null
         val text = remote ?: readAssetOrNull(ASSET_FILE)
-        Log.d("wzhhh", "loadCatalog fromNetwork=$lastFromNetwork textIsNull=${text==null}")
+        Log.d(TAG, "loadCatalog fromNetwork=$lastFromNetwork textIsNull=${text==null}")
         val parsed = json.decodeFromString<Catalog>(text ?: "{\"music\":[]}")
         cache = parsed
         return@withContext parsed
@@ -57,31 +58,32 @@ class CatalogRepository(private val context: Context) {
     fun clearCache() { cache = null }
 
     private fun downloadOrNull(url: String): String? = try {
-        Log.d("wzhhh", "download $url")
+        Log.d(TAG, "download $url")
         val req = Request.Builder().url(url).build()
         client.newCall(req).execute().use { resp ->
-            Log.d("wzhhh", "response code=${resp.code} success=${resp.isSuccessful}")
+            Log.d(TAG, "response code=${resp.code} success=${resp.isSuccessful}")
             if (!resp.isSuccessful) return null
             val body = resp.body?.string()
-            Log.d("wzhhh", "response body null=${body==null} length=${body?.length}")
+            Log.d(TAG, "response body null=${body==null} length=${body?.length}")
             body
         }
     } catch (e: Exception) {
-        Log.d("wzhhh", "download error ${e.message}")
+        Log.d(TAG, "download error ${e.message}")
         null
     }
 
     private fun readAssetOrNull(name: String): String? = try {
-        Log.d("wzhhh", "read asset $name")
+        Log.d(TAG, "read asset $name")
         context.assets.open(name).use { input ->
             BufferedReader(InputStreamReader(input)).readText()
         }
     } catch (e: Exception) {
-        Log.d("wzhhh", "asset read error ${e.message}")
+        Log.d(TAG, "asset read error ${e.message}")
         null
     }
 
     companion object {
+        const val TAG = "CatalogRepository"
         const val REMOTE_URL = "https://storage.googleapis.com/uamp/catalog.json"
         const val ASSET_FILE = "catalog.json"
     }
