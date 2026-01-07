@@ -40,7 +40,7 @@ class AlbumDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val albumId = requireArguments().getString("albumId") ?: return
-        ViewCompat.setTransitionName(binding.cover, "album_${albumId}_cover")
+        ViewCompat.setTransitionName(binding.coverCard, "album_${albumId}_cover")
         ViewCompat.setTransitionName(binding.title, "album_${albumId}_title")
         ViewCompat.setTransitionName(binding.artist, "album_${albumId}_artist")
         view.postDelayed({ startPostponedEnterTransition() }, 500)
