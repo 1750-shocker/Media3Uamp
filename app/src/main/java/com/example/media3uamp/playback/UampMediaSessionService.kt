@@ -9,6 +9,7 @@ import android.os.Build
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.LibraryResult
 import androidx.media3.session.MediaLibraryService
@@ -65,6 +66,7 @@ class UampMediaSessionService : MediaLibraryService() {
         }
     }
 
+    @UnstableApi
     private inner class LibraryCallback : MediaLibrarySession.Callback {
         override fun onSetMediaItems(
             session: MediaSession,
