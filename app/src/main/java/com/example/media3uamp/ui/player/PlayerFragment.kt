@@ -62,24 +62,24 @@ class PlayerFragment : Fragment() {
             controller.play()
             updateMetadata(controller)
             _binding?.playerController?.setDurations(controller.currentPosition, controller.duration)
-            updateCoverRotation(controller.isPlaying)
+            updateCoverRotation(controller.playWhenReady)
             playerListener = object : Player.Listener {
                 override fun onEvents(player: Player, events: Player.Events) {
                     updateMetadata(player)
                     _binding?.playerController?.setDurations(player.currentPosition, player.duration)
-                    _binding?.playerController?.setPlaying(player.isPlaying)
-                    updateCoverRotation(player.isPlaying)
+                    _binding?.playerController?.setPlaying(player.playWhenReady)
+                    updateCoverRotation(player.playWhenReady)
                 }
             }
             controller.addListener(playerListener!!)
             binding.playerController.setControllerListener(object :
                 PlayerViewController.PlayerControllerListener {
-                override fun onPlayToggle() { if (controller.isPlaying) controller.pause() else controller.play(); updateCoverRotation(controller.isPlaying) }
+                override fun onPlayToggle() { if (controller.isPlaying) controller.pause() else controller.play(); updateCoverRotation(controller.playWhenReady) }
                 override fun onPreviousClick() { controller.seekToPrevious() }
                 override fun onNextClick() { controller.seekToNext() }
                 override fun onSeekTo(progress: Int) { controller.seekTo(progress.toLong()) }
             })
-            binding.playerController.setPlaying(controller.isPlaying)
+            binding.playerController.setPlaying(controller.playWhenReady)
 
             progressJob?.cancel()
             progressJob = CoroutineScope(Dispatchers.Main).launch {
