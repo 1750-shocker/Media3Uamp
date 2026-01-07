@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.media3uamp.R
 import com.example.media3uamp.databinding.ItemAlbumBinding
 
 class AlbumsAdapter(private val onClick: (MediaItem) -> Unit) :
@@ -27,7 +28,7 @@ class AlbumsAdapter(private val onClick: (MediaItem) -> Unit) :
             binding.title.text = md.title ?: ""
             binding.artist.text = md.artist ?: ""
             binding.year.text = md.releaseYear?.toString() ?: ""
-            Glide.with(binding.cover).load(md.artworkUri).placeholder(com.example.media3uamp.R.drawable.album_placeholder).into(binding.cover)
+            Glide.with(binding.cover).load(md.artworkUri).placeholder(R.drawable.album_placeholder).into(binding.cover)
             binding.card.setOnClickListener { onClick(item) }
         }
     }

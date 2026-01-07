@@ -6,10 +6,12 @@ import android.view.animation.LinearInterpolator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import com.bumptech.glide.Glide
+import com.example.media3uamp.R
 import com.example.media3uamp.databinding.FragmentPlayerBinding
 import com.example.media3uamp.playback.PlaybackClient
 import com.example.media3uamp.data.CatalogRepository
@@ -45,7 +47,7 @@ class PlayerFragment : Fragment() {
             val repo = CatalogRepository(requireContext())
             val tracks = repo.getTracks(albumId).map { it.toMediaItem(albumId) }
             if (tracks.isEmpty()) {
-                android.widget.Toast.makeText(requireContext(), "该专辑暂无曲目或数据加载失败", android.widget.Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "该专辑暂无曲目或数据加载失败", Toast.LENGTH_SHORT).show()
                 return@launch
             }
             if (index !in tracks.indices) index = 0
@@ -108,7 +110,7 @@ class PlayerFragment : Fragment() {
         val md = player.mediaMetadata
         b.title.text = md.title ?: ""
         b.artist.text = md.artist ?: ""
-        md.artworkUri?.let { Glide.with(b.cover).load(it).circleCrop().placeholder(com.example.media3uamp.R.drawable.album_placeholder).into(b.cover) }
+        md.artworkUri?.let { Glide.with(b.cover).load(it).circleCrop().placeholder(R.drawable.album_placeholder).into(b.cover) }
     }
 
     override fun onDestroyView() {

@@ -82,7 +82,6 @@ class PlayerViewController @JvmOverloads constructor(
         val safeCurrent = if (currentMs == C.TIME_UNSET || currentMs < 0) 0 else min(currentMs, safeTotal)
         tvCurDuration.text = formatTime(safeCurrent)
         tvDuration.text = if (safeTotal == 0L) "--:--" else formatTime(safeTotal)
-
         val max = min(Int.MAX_VALUE.toLong(), safeTotal).toInt()
         val progress = min(max, safeCurrent.toInt())
         seekBar.max = max
