@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -44,12 +45,18 @@ class AlbumDetailFragment : Fragment() {
         ViewCompat.setTransitionName(binding.artist, "album_${albumId}_artist")
         view.postDelayed({ startPostponedEnterTransition() }, 500)
 
-        adapter = AlbumDetailAdapter { index, _ ->
+        adapter = AlbumDetailAdapter(albumId) { index, item, title, artist ->
             val args = Bundle().apply {
                 putString("albumId", albumId)
                 putInt("trackIndex", index)
+                putString("trackTitle", item.mediaMetadata.title?.toString())
+                putString("trackArtist", item.mediaMetadata.artist?.toString())
             }
-            findNavController().navigate(R.id.action_to_player, args)
+            val extras = FragmentNavigatorExtras(
+                title to "track_${albumId}_${index}_title",
+                artist to "track_${albumId}_${index}_artist",
+            )
+            findNavController().navigate(R.id.action_to_player, args, null, extras)
         }
         binding.recycler.layoutManager = LinearLayoutManager(requireContext())
         binding.recycler.adapter = adapter

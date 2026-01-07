@@ -31,6 +31,14 @@
         android:label="播放">
         <argument android:name="albumId" app:argType="string" />
         <argument android:name="trackIndex" app:argType="integer" />
+        <argument
+            android:name="trackTitle"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="trackArtist"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 
 </navigation>

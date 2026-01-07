@@ -2,11 +2,14 @@ package com.example.media3uamp.ui.player
 
 import android.os.Bundle
 import android.animation.ObjectAnimator
+import android.transition.TransitionInflater
 import android.view.animation.LinearInterpolator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.ViewCompat
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
@@ -30,6 +33,16 @@ class PlayerFragment : Fragment() {
     private var playerListener: Player.Listener? = null
     private var progressJob: Job? = null
     private var coverAnimator: ObjectAnimator? = null
+    private var startedEnterTransition = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition = TransitionInflater.from(requireContext())
+            .inflateTransition(android.R.transition.move)
+        sharedElementReturnTransition = TransitionInflater.from(requireContext())
+            .inflateTransition(android.R.transition.move)
+        postponeEnterTransition()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPlayerBinding.inflate(inflater, container, false)
@@ -41,6 +54,12 @@ class PlayerFragment : Fragment() {
         initCoverAnimator()
         val albumId = requireArguments().getString("albumId") ?: return
         var index = requireArguments().getInt("trackIndex")
+        binding.title.text = requireArguments().getString("trackTitle") ?: ""
+        binding.artist.text = requireArguments().getString("trackArtist") ?: ""
+        ViewCompat.setTransitionName(binding.title, "track_${albumId}_${index}_title")
+        ViewCompat.setTransitionName(binding.artist, "track_${albumId}_${index}_artist")
+        view.postDelayed({ startEnterTransitionOnce() }, 1200)
+
         CoroutineScope(Dispatchers.Main).launch {
             val browser = PlaybackClient.getBrowser(requireContext())
             val controller = PlaybackClient.getController(requireContext())
@@ -116,6 +135,13 @@ class PlayerFragment : Fragment() {
         b.title.text = md.title ?: ""
         b.artist.text = md.artist ?: ""
         md.artworkUri?.let { Glide.with(b.cover).load(it).circleCrop().placeholder(R.drawable.album_placeholder).into(b.cover) }
+        b.root.doOnPreDraw { startEnterTransitionOnce() }
+    }
+
+    private fun startEnterTransitionOnce() {
+        if (startedEnterTransition) return
+        startedEnterTransition = true
+        startPostponedEnterTransition()
     }
 
     override fun onDestroyView() {
@@ -126,6 +152,7 @@ class PlayerFragment : Fragment() {
         progressJob?.cancel()
         progressJob = null
         _binding = null
+        startedEnterTransition = false
         super.onDestroyView()
     }
 }

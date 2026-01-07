@@ -2,6 +2,8 @@ package com.example.media3uamp.ui.detail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.view.ViewCompat
 import androidx.media3.common.MediaItem
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -9,7 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.media3uamp.databinding.ItemTrackBinding
 import java.util.Locale
 
-class AlbumDetailAdapter(private val onClick: (index: Int, item: MediaItem) -> Unit) :
+class AlbumDetailAdapter(
+    private val albumId: String,
+    private val onClick: (index: Int, item: MediaItem, title: TextView, artist: TextView) -> Unit,
+) :
     ListAdapter<MediaItem, AlbumDetailAdapter.VH>(DIFF) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -23,13 +28,16 @@ class AlbumDetailAdapter(private val onClick: (index: Int, item: MediaItem) -> U
 
     inner class VH(private val binding: ItemTrackBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(index: Int, item: MediaItem) {
+            ViewCompat.setTransitionName(binding.title, "track_${albumId}_${index}_title")
+            ViewCompat.setTransitionName(binding.artist, "track_${albumId}_${index}_artist")
+
             val md = item.mediaMetadata
             binding.index.text = (index + 1).toString()
             binding.title.text = md.title ?: ""
             binding.artist.text = md.artist ?: ""
             val sec = md.extras?.getInt("durationSec") ?: 0
             binding.duration.text = formatDuration(sec)
-            binding.card.setOnClickListener { onClick(index, item) }
+            binding.card.setOnClickListener { onClick(index, item, binding.title, binding.artist) }
         }
     }
 
