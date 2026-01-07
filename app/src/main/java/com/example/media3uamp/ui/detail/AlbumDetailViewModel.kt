@@ -6,8 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
-import com.example.media3uamp.data.CatalogRepository
-import com.example.media3uamp.data.toMediaItem
+import com.example.media3uamp.playback.PlaybackClient
+import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
 
 class AlbumDetailViewModel(app: Application) : AndroidViewModel(app) {
@@ -18,12 +18,11 @@ class AlbumDetailViewModel(app: Application) : AndroidViewModel(app) {
 
     fun load(albumId: String) {
         viewModelScope.launch {
-            val repo = CatalogRepository(getApplication())
-            val album = repo.getAlbums().firstOrNull { it.id == albumId }
-            val albumItem = album?.toMediaItem()
-            _header.value = albumItem
-            val tracks = repo.getTracks(albumId).map { it.toMediaItem(albumId) }
-            _tracks.value = tracks
+            val browser = PlaybackClient.getBrowser(getApplication())
+            val header = browser.getItem("album:$albumId").await().value
+            _header.value = header
+            val children = browser.getChildren("album:$albumId", 0, Int.MAX_VALUE, null).await()
+            _tracks.value = children.value ?: emptyList()
         }
     }
 }

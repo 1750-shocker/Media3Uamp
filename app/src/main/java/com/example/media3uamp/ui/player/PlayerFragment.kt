@@ -14,14 +14,13 @@ import com.bumptech.glide.Glide
 import com.example.media3uamp.R
 import com.example.media3uamp.databinding.FragmentPlayerBinding
 import com.example.media3uamp.playback.PlaybackClient
-import com.example.media3uamp.data.CatalogRepository
-import com.example.media3uamp.data.toMediaItem
 import com.example.media3uamp.ui.view.PlayerViewController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.guava.await
 
 class PlayerFragment : Fragment() {
     private var _binding: FragmentPlayerBinding? = null
@@ -42,10 +41,12 @@ class PlayerFragment : Fragment() {
         val albumId = requireArguments().getString("albumId") ?: return
         var index = requireArguments().getInt("trackIndex")
         CoroutineScope(Dispatchers.Main).launch {
+            val browser = PlaybackClient.getBrowser(requireContext())
             val controller = PlaybackClient.getController(requireContext())
             player = controller
-            val repo = CatalogRepository(requireContext())
-            val tracks = repo.getTracks(albumId).map { it.toMediaItem(albumId) }
+            val parentId = "album:$albumId"
+            val children = browser.getChildren(parentId, 0, Int.MAX_VALUE, null).await()
+            val tracks = children.value ?: emptyList()
             if (tracks.isEmpty()) {
                 Toast.makeText(requireContext(), "该专辑暂无曲目或数据加载失败", Toast.LENGTH_SHORT).show()
                 return@launch

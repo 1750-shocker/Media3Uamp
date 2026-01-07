@@ -6,25 +6,45 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
-import com.example.media3uamp.data.CatalogRepository
-import com.example.media3uamp.data.toMediaItem
+import androidx.media3.session.SessionCommand
+import com.example.media3uamp.playback.PlaybackClient
+import kotlinx.coroutines.guava.await
 import kotlinx.coroutines.launch
+import android.os.Bundle
 
 class AlbumsViewModel(app: Application) : AndroidViewModel(app) {
     private val _albums = MutableLiveData<List<MediaItem>>()
     val albums: LiveData<List<MediaItem>> = _albums
-    private val _fromNetwork = MutableLiveData<Boolean>()
-    val fromNetwork: LiveData<Boolean> = _fromNetwork
-    private val repo = CatalogRepository(getApplication())
 
     fun load(force: Boolean = false) {
         viewModelScope.launch {
-            val albums = repo.getAlbums(force).map { it.toMediaItem() }
-            _albums.value = albums
-            _fromNetwork.value = repo.wasLastLoadFromNetwork()
+            if (force) {
+                refreshInternal()
+            } else {
+                loadInternal()
+            }
         }
     }
 
-    fun refresh() = load(force = true)
+    fun refresh() {
+        viewModelScope.launch {
+            refreshInternal()
+        }
+    }
+
+    private suspend fun refreshInternal() {
+        val browser = PlaybackClient.getBrowser(getApplication())
+        browser.sendCustomCommand(
+            SessionCommand("refresh_catalog", Bundle.EMPTY),
+            Bundle.EMPTY
+        ).await()
+        loadInternal()
+    }
+
+    private suspend fun loadInternal() {
+        val browser = PlaybackClient.getBrowser(getApplication())
+        val result = browser.getChildren("root", 0, Int.MAX_VALUE, null).await()
+        _albums.value = result.value ?: emptyList()
+    }
 }
 
