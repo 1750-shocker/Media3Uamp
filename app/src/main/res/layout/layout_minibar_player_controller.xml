@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:layout_marginHorizontal="8dp"
-    android:background="@color/minibar_bg"
+    android:background="@drawable/bg_minibar_rounded"
+    android:clipToOutline="true"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
     tools:ignore="ResourceName">
 
     <ImageView
@@ -34,76 +34,81 @@
         android:id="@+id/layout_music_cover"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginStart="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_album_cover"
-            android:layout_width="@dimen/px_82"
-            android:layout_height="@dimen/px_82"
-            android:layout_marginEnd="-23px"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="-13dp"
             android:scaleType="fitXY"
             android:src="@drawable/ic_player_bar_disk"
-            app:layout_constraintBottom_toBottomOf="@+id/cd_music_cover"
-            app:layout_constraintEnd_toEndOf="@+id/cd_music_cover"
-            app:layout_constraintTop_toTopOf="@+id/cd_music_cover" />
+            app:layout_constraintBottom_toBottomOf="@id/cd_music_cover"
+            app:layout_constraintEnd_toEndOf="@id/cd_music_cover"
+            app:layout_constraintTop_toTopOf="@id/cd_music_cover" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cd_music_cover"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="@dimen/px_16"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:cardCornerRadius="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_music_cover"
-                android:layout_width="@dimen/px_86"
-                android:layout_height="@dimen/px_86"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_player_default_cover" />
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/layout_music_info"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/px_38"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="3dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/layout_music_cover"
+        app:layout_constraintEnd_toStartOf="@id/iv_previous"
+        app:layout_constraintStart_toEndOf="@id/layout_music_cover"
         app:layout_constraintTop_toTopOf="parent">
 
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_music_name"
-            android:layout_width="190dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:gravity="center|start"
             android:includeFontPadding="false"
+            android:maxLines="1"
             android:singleLine="true"
             android:text="@string/unknown"
             android:textColor="@color/transparent_white"
             android:textDirection="locale"
-            android:textSize="36px" />
+            android:textSize="46px"
+            android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_singer_name"
-            android:layout_width="190dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/px_6"
             android:ellipsize="end"
             android:gravity="center|start"
             android:includeFontPadding="false"
+            android:maxLines="1"
             android:singleLine="true"
             android:text="@string/unknown"
             android:textColor="@color/transparent_white_80"
             android:textDirection="locale"
-            android:textSize="26px"
+            android:textSize="36px"
             android:visibility="visible" />
     </LinearLayout>
 
@@ -112,21 +117,21 @@
         android:layout_width="@dimen/px_54"
         android:layout_height="@dimen/px_54"
         android:layout_gravity="center"
+        android:layout_marginEnd="10dp"
         android:layoutDirection="ltr"
         android:scaleType="fitCenter"
-        android:layout_marginEnd="20dp"
-        android:src="@drawable/icon_previous"
+        android:src="@drawable/icon_minibar_previous"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/iv_play"
+        app:layout_constraintEnd_toStartOf="@id/iv_play"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.example.media3uamp.ui.view.CustomImageViewButton
         android:id="@+id/iv_play"
         android:layout_width="@dimen/px_90"
         android:layout_height="@dimen/px_90"
-        android:layout_marginEnd="17dp"
+        android:layout_marginEnd="10dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_player_pause"
+        android:src="@drawable/icon_minibar_pause"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/iv_next"
         app:layout_constraintTop_toTopOf="parent" />
@@ -135,10 +140,10 @@
         android:id="@+id/iv_next"
         android:layout_width="@dimen/px_54"
         android:layout_height="@dimen/px_54"
+        android:layout_marginEnd="10dp"
         android:layoutDirection="ltr"
         android:scaleType="fitCenter"
-        android:layout_marginEnd="10dp"
-        android:src="@drawable/icon_next"
+        android:src="@drawable/icon_minibar_next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

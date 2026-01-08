@@ -41,13 +41,15 @@ class MinibarPlayerComponent(
             if (c.isPlaying) c.pause() else c.play()
             updateMinibarState(c)
         }
-        minibarBinding.root.setOnClickListener {
-            if (minibarBinding.root.visibility != View.VISIBLE) return@setOnClickListener
+        val openPlayerClickListener = View.OnClickListener {
+            if (minibarBinding.root.visibility != View.VISIBLE) return@OnClickListener
             val snapshotView = resolveSnapshotView()
             val masks = createRoundedCoverMasks(snapshotView)
             PlayerFragment.Companion.setBackgroundSnapshot(snapshotView, masks)
             navController.navigate(playerDestinationId, Bundle.EMPTY)
         }
+        minibarBinding.layoutMusicCover.setOnClickListener(openPlayerClickListener)
+        minibarBinding.layoutMusicInfo.setOnClickListener(openPlayerClickListener)
 
         destinationChangedListener = NavController.OnDestinationChangedListener { _, destination, _ ->
             val c = controller
@@ -99,7 +101,7 @@ class MinibarPlayerComponent(
         val md = player.mediaMetadata
         minibarBinding.tvMusicName.text = md.title ?: activity.getString(R.string.unknown)
         minibarBinding.tvSingerName.text = md.artist ?: activity.getString(R.string.unknown)
-        minibarBinding.ivPlay.setImageResource(if (player.playWhenReady) R.drawable.ic_player_play else R.drawable.ic_player_pause)
+        minibarBinding.ivPlay.setImageResource(if (player.playWhenReady) R.drawable.icon_minibar_play else R.drawable.icon_minibar_pause)
 
         val artworkUri = md.artworkUri
         if (artworkUri == null) {
