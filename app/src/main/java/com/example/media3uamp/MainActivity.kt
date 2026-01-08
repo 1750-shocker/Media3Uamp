@@ -26,7 +26,8 @@ class MainActivity : AppCompatActivity() {
         }
         setSupportActionBar(binding.toolbar)
         val navHost = supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
-        NavigationUI.setupWithNavController(binding.toolbar, navHost.navController)
+        val navController = navHost.navController
+        NavigationUI.setupWithNavController(binding.toolbar, navController)
 
         if (android.os.Build.VERSION.SDK_INT >= 33) {
             val granted = ContextCompat.checkSelfPermission(

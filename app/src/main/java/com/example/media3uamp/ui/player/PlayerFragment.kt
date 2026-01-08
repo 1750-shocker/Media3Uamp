@@ -1,19 +1,29 @@
 package com.example.media3uamp.ui.player
 
 import android.os.Bundle
+import android.annotation.SuppressLint
 import android.animation.ObjectAnimator
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.RectF
 import android.transition.TransitionInflater
+import android.view.MotionEvent
 import android.view.animation.LinearInterpolator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.VelocityTracker
 import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnPreDraw
+import androidx.core.view.drawToBitmap
 import androidx.fragment.app.Fragment
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.media3uamp.R
 import com.example.media3uamp.databinding.FragmentPlayerBinding
@@ -25,6 +35,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.guava.await
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 class PlayerFragment : Fragment() {
     private var _binding: FragmentPlayerBinding? = null
@@ -34,6 +47,59 @@ class PlayerFragment : Fragment() {
     private var progressJob: Job? = null
     private var coverAnimator: ObjectAnimator? = null
     private var startedEnterTransition = false
+    private var swipeVelocityTracker: VelocityTracker? = null
+    private var swipeDownY = 0f
+    private var swipeDownX = 0f
+    private var swipeIsDragging = false
+    private var swipeCanStart = false
+
+    companion object {
+        private var backgroundSnapshot: Bitmap? = null
+
+        data class RoundedRectMask(
+            val left: Float,
+            val top: Float,
+            val right: Float,
+            val bottom: Float,
+            val radius: Float,
+            val fillColor: Int,
+        )
+
+        fun setBackgroundSnapshot(view: View, masks: List<RoundedRectMask> = emptyList()) {
+            val original = view.drawToBitmap(Bitmap.Config.RGB_565).copy(Bitmap.Config.RGB_565, true)
+            masks.forEach { mask ->
+                applyRoundedRectMask(
+                    bitmap = original,
+                    rect = RectF(mask.left, mask.top, mask.right, mask.bottom),
+                    radius = mask.radius,
+                    fillColor = mask.fillColor,
+                )
+            }
+            val maxSide = 1080
+            val scale = min(1f, maxSide.toFloat() / max(original.width, original.height).toFloat())
+            if (scale >= 1f) {
+                backgroundSnapshot = original
+                return
+            }
+            val w = max(1, (original.width * scale).toInt())
+            val h = max(1, (original.height * scale).toInt())
+            val scaled = Bitmap.createScaledBitmap(original, w, h, true)
+            if (scaled != original) original.recycle()
+            backgroundSnapshot = scaled
+        }
+
+        private fun applyRoundedRectMask(bitmap: Bitmap, rect: RectF, radius: Float, fillColor: Int) {
+            val canvas = Canvas(bitmap)
+            val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                style = Paint.Style.FILL
+                color = fillColor
+            }
+            val full = Path().apply { addRect(rect, Path.Direction.CW) }
+            val round = Path().apply { addRoundRect(rect, radius, radius, Path.Direction.CW) }
+            full.op(round, Path.Op.DIFFERENCE)
+            canvas.drawPath(full, paint)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +118,9 @@ class PlayerFragment : Fragment() {
     @androidx.annotation.OptIn(UnstableApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initCoverAnimator()
+        binding.underlaySnapshot.setImageBitmap(backgroundSnapshot)
+        backgroundSnapshot = null
+        setupSwipeToDismiss()
         val albumId = requireArguments().getString("albumId") ?: return
         var index = requireArguments().getInt("trackIndex")
         binding.title.text = requireArguments().getString("trackTitle") ?: ""
@@ -110,6 +179,90 @@ class PlayerFragment : Fragment() {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupSwipeToDismiss() {
+        val sheet = binding.sheet
+        val touchSlop = 12f * resources.displayMetrics.density
+        val dismissDistanceRatio = 0.25f
+
+        sheet.setOnTouchListener { v, event ->
+            val b = _binding ?: return@setOnTouchListener false
+            val tracker = swipeVelocityTracker ?: VelocityTracker.obtain().also { swipeVelocityTracker = it }
+            tracker.addMovement(event)
+
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    swipeDownY = event.rawY
+                    swipeDownX = event.rawX
+                    swipeIsDragging = false
+                    swipeCanStart = event.y < b.playerController.top
+                    swipeCanStart
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    if (!swipeCanStart) return@setOnTouchListener false
+                    val dy = event.rawY - swipeDownY
+                    val dx = event.rawX - swipeDownX
+                    if (!swipeIsDragging) {
+                        if (dy > touchSlop && abs(dy) > abs(dx)) {
+                            swipeIsDragging = true
+                            v.parent?.requestDisallowInterceptTouchEvent(true)
+                        } else {
+                            return@setOnTouchListener true
+                        }
+                    }
+                    if (swipeIsDragging) {
+                        val translation = max(0f, dy)
+                        v.translationY = translation
+                        val progress = (translation / max(1f, v.height.toFloat())).coerceIn(0f, 1f)
+                        v.alpha = 1f - progress * 0.15f
+                        true
+                    } else {
+                        true
+                    }
+                }
+                MotionEvent.ACTION_UP,
+                MotionEvent.ACTION_CANCEL,
+                -> {
+                    if (!swipeIsDragging) {
+                        swipeVelocityTracker?.recycle()
+                        swipeVelocityTracker = null
+                        swipeCanStart = false
+                        return@setOnTouchListener false
+                    }
+
+                    tracker.computeCurrentVelocity(1000)
+                    val velocityY = tracker.yVelocity
+                    swipeVelocityTracker?.recycle()
+                    swipeVelocityTracker = null
+                    swipeCanStart = false
+                    swipeIsDragging = false
+
+                    val dismissDistance = v.height * dismissDistanceRatio
+                    val shouldDismiss = v.translationY >= dismissDistance || velocityY > 1600f
+
+                    if (shouldDismiss) {
+                        v.animate()
+                            .translationY(v.height.toFloat())
+                            .alpha(0.85f)
+                            .setDuration(180L)
+                            .withEndAction {
+                                if (isAdded) findNavController().popBackStack()
+                            }
+                            .start()
+                    } else {
+                        v.animate()
+                            .translationY(0f)
+                            .alpha(1f)
+                            .setDuration(180L)
+                            .start()
+                    }
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
     private fun initCoverAnimator() {
         if (coverAnimator == null) {
             coverAnimator = ObjectAnimator.ofFloat(binding.cover, "rotation", 0f, 360f)
@@ -144,6 +297,7 @@ class PlayerFragment : Fragment() {
         startPostponedEnterTransition()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onDestroyView() {
         coverAnimator?.cancel()
         coverAnimator = null
@@ -151,6 +305,10 @@ class PlayerFragment : Fragment() {
         playerListener = null
         progressJob?.cancel()
         progressJob = null
+        binding.sheet.setOnTouchListener(null)
+        binding.underlaySnapshot.setImageDrawable(null)
+        swipeVelocityTracker?.recycle()
+        swipeVelocityTracker = null
         _binding = null
         startedEnterTransition = false
         super.onDestroyView()

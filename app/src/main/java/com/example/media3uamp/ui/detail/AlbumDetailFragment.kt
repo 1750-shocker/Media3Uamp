@@ -15,8 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.bumptech.glide.request.transition.Transition
+import com.google.android.material.color.MaterialColors
 import com.example.media3uamp.R
 import com.example.media3uamp.databinding.FragmentAlbumDetailBinding
+import com.example.media3uamp.ui.player.PlayerFragment
 
 class AlbumDetailFragment : Fragment() {
     private var _binding: FragmentAlbumDetailBinding? = null
@@ -55,6 +57,28 @@ class AlbumDetailFragment : Fragment() {
             val extras = FragmentNavigatorExtras(
                 title to "track_${albumId}_${index}_title",
                 artist to "track_${albumId}_${index}_artist",
+            )
+            val rootLoc = IntArray(2)
+            val coverLoc = IntArray(2)
+            binding.root.getLocationInWindow(rootLoc)
+            binding.cover.getLocationInWindow(coverLoc)
+            val left = (coverLoc[0] - rootLoc[0]).toFloat()
+            val top = (coverLoc[1] - rootLoc[1]).toFloat()
+            val right = left + binding.cover.width.toFloat()
+            val bottom = top + binding.cover.height.toFloat()
+            val fillColor = MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorSurface)
+            PlayerFragment.setBackgroundSnapshot(
+                binding.root,
+                listOf(
+                    PlayerFragment.Companion.RoundedRectMask(
+                        left = left,
+                        top = top,
+                        right = right,
+                        bottom = bottom,
+                        radius = binding.coverCard.radius,
+                        fillColor = fillColor,
+                    ),
+                ),
             )
             findNavController().navigate(R.id.action_to_player, args, null, extras)
         }

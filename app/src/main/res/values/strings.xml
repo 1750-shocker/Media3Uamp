@@ -46,6 +46,7 @@
 <string name="radio_am">AM</string>
 <string name="str_scanning">Scanning...</string>
 <string name="cancel">Cancel</string>
+<string name="close">Close</string>
 <string name="cancel_time">Cancel (%ds)</string>
 <string name="radio_fm_unit">MHz</string>
 <string name="radio_am_unit">kHz</string>
