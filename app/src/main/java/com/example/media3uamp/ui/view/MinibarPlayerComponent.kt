@@ -36,7 +36,10 @@ class MinibarPlayerComponent(
     private var destinationChangedListener: NavController.OnDestinationChangedListener? = null
 
     fun bind() {
-        val surfaceColor = MaterialColors.getColor(minibarBinding.root, com.google.android.material.R.attr.colorSurface)
+        val surfaceColor = MaterialColors.getColor(
+            minibarBinding.root,
+            com.google.android.material.R.attr.colorSurface
+        )
         val transparentSurfaceColor = ColorUtils.setAlphaComponent(surfaceColor, 0)
         minibarBinding.bottomFade.background = GradientDrawable(
             GradientDrawable.Orientation.TOP_BOTTOM,
@@ -60,11 +63,13 @@ class MinibarPlayerComponent(
         minibarBinding.layoutMusicCover.setOnClickListener(openPlayerClickListener)
         minibarBinding.layoutMusicInfo.setOnClickListener(openPlayerClickListener)
 
-        destinationChangedListener = NavController.OnDestinationChangedListener { _, destination, _ ->
-            val c = controller
-            val shouldShow = destination.id != playerDestinationId && c?.currentMediaItem != null
-            minibarBinding.root.visibility = if (shouldShow) View.VISIBLE else View.GONE
-        }.also { navController.addOnDestinationChangedListener(it) }
+        destinationChangedListener =
+            NavController.OnDestinationChangedListener { _, destination, _ ->
+                val c = controller
+                val shouldShow =
+                    destination.id != playerDestinationId && c?.currentMediaItem != null
+                minibarBinding.root.visibility = if (shouldShow) View.VISIBLE else View.GONE
+            }.also { navController.addOnDestinationChangedListener(it) }
 
         CoroutineScope(Dispatchers.Main).launch {
             val controller = PlaybackClient.getController(activity)
@@ -74,7 +79,8 @@ class MinibarPlayerComponent(
                 override fun onEvents(player: Player, events: Player.Events) {
                     updateMinibarState(player)
                     val destId = navController.currentDestination?.id
-                    val shouldShow = destId != playerDestinationId && player.currentMediaItem != null
+                    val shouldShow =
+                        destId != playerDestinationId && player.currentMediaItem != null
                     minibarBinding.root.visibility = if (shouldShow) View.VISIBLE else View.GONE
                 }
             }
@@ -98,7 +104,8 @@ class MinibarPlayerComponent(
     }
 
     private fun resolveSnapshotView(): View {
-        val navHost = activity.supportFragmentManager.findFragmentById(navHostFragmentId) as? NavHostFragment
+        val navHost =
+            activity.supportFragmentManager.findFragmentById(navHostFragmentId) as? NavHostFragment
         val currentFragmentView = navHost
             ?.childFragmentManager
             ?.primaryNavigationFragment
@@ -129,7 +136,8 @@ class MinibarPlayerComponent(
     }
 
     private fun createRoundedCoverMasks(root: View): List<PlayerFragment.Companion.RoundedRectMask> {
-        val fillColor = MaterialColors.getColor(root, com.google.android.material.R.attr.colorSurface)
+        val fillColor =
+            MaterialColors.getColor(root, com.google.android.material.R.attr.colorSurface)
 
         val recycler = root.findViewById<RecyclerView?>(R.id.recycler)
         if (recycler != null && recycler.childCount > 0) {
@@ -140,7 +148,8 @@ class MinibarPlayerComponent(
                 val item = recycler.getChildAt(i) ?: continue
                 val cover = item.findViewById<View?>(R.id.cover) ?: continue
                 val coverCard = item.findViewById<MaterialCardView?>(R.id.coverCard) ?: continue
-                val mask = createRoundedCoverMask(root, rootLoc, cover, coverCard, fillColor) ?: continue
+                val mask =
+                    createRoundedCoverMask(root, rootLoc, cover, coverCard, fillColor) ?: continue
                 masks.add(mask)
             }
             if (masks.isNotEmpty()) return masks
@@ -150,7 +159,8 @@ class MinibarPlayerComponent(
         val coverCard = root.findViewById<MaterialCardView?>(R.id.coverCard) ?: return emptyList()
         val rootLoc = IntArray(2)
         root.getLocationInWindow(rootLoc)
-        val mask = createRoundedCoverMask(root, rootLoc, cover, coverCard, fillColor) ?: return emptyList()
+        val mask =
+            createRoundedCoverMask(root, rootLoc, cover, coverCard, fillColor) ?: return emptyList()
         return listOf(mask)
     }
 

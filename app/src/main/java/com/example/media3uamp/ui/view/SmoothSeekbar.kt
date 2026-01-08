@@ -94,7 +94,8 @@ class SmoothSeekbar @JvmOverloads constructor(
     override fun draw(canvas: Canvas) {
         try {
             val drawable = progressDrawable as? LayerDrawable
-            val background = drawable?.findDrawableByLayerId(android.R.id.background) as? GradientDrawable
+            val background =
+                drawable?.findDrawableByLayerId(android.R.id.background) as? GradientDrawable
             val progress = drawable?.findDrawableByLayerId(android.R.id.progress) as? ClipDrawable
 
             if (background != null && progress != null) {
@@ -179,7 +180,7 @@ class SmoothSeekbar @JvmOverloads constructor(
                 MotionEvent.ACTION_MOVE -> Unit
                 MotionEvent.ACTION_UP,
                 MotionEvent.ACTION_CANCEL,
-                -> startUpAnimation()
+                    -> startUpAnimation()
             }
         } catch (_: Exception) {
         }

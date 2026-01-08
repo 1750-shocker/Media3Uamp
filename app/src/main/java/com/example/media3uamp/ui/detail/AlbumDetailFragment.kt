@@ -34,7 +34,11 @@ class AlbumDetailFragment : Fragment() {
         postponeEnterTransition()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentAlbumDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -61,7 +65,10 @@ class AlbumDetailFragment : Fragment() {
             val top = (coverLoc[1] - rootLoc[1]).toFloat()
             val right = left + binding.cover.width.toFloat()
             val bottom = top + binding.cover.height.toFloat()
-            val fillColor = MaterialColors.getColor(binding.root, com.google.android.material.R.attr.colorSurface)
+            val fillColor = MaterialColors.getColor(
+                binding.root,
+                com.google.android.material.R.attr.colorSurface
+            )
             PlayerFragment.setBackgroundSnapshot(
                 binding.root,
                 listOf(
@@ -93,7 +100,10 @@ class AlbumDetailFragment : Fragment() {
                         .placeholder(R.drawable.album_placeholder)
                         .into(
                             object : DrawableImageViewTarget(binding.cover) {
-                                override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+                                override fun onResourceReady(
+                                    resource: Drawable,
+                                    transition: Transition<in Drawable>?
+                                ) {
                                     super.onResourceReady(resource, transition)
                                     startPostponedEnterTransition()
                                 }

@@ -38,8 +38,16 @@ class AlbumsAdapter(
             binding.title.text = md.title ?: ""
             binding.artist.text = md.artist ?: ""
             binding.year.text = md.releaseYear?.toString() ?: ""
-            Glide.with(binding.cover).load(md.artworkUri).placeholder(R.drawable.album_placeholder).into(binding.cover)
-            binding.card.setOnClickListener { onClick(item, binding.coverCard, binding.title, binding.artist) }
+            Glide.with(binding.cover).load(md.artworkUri).placeholder(R.drawable.album_placeholder)
+                .into(binding.cover)
+            binding.card.setOnClickListener {
+                onClick(
+                    item,
+                    binding.coverCard,
+                    binding.title,
+                    binding.artist
+                )
+            }
         }
     }
 

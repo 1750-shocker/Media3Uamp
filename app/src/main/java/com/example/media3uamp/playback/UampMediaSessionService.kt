@@ -36,7 +36,8 @@ class UampMediaSessionService : MediaLibraryService() {
     private lateinit var repository: CatalogRepository
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val libraryDataMutex = Mutex()
-    @Volatile private var libraryData: LibraryData? = null
+    @Volatile
+    private var libraryData: LibraryData? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -46,7 +47,8 @@ class UampMediaSessionService : MediaLibraryService() {
         createNotificationChannel()
     }
 
-    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession = session
+    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession =
+        session
 
     override fun onDestroy() {
         session.release()
@@ -87,11 +89,14 @@ class UampMediaSessionService : MediaLibraryService() {
                         val full = data.trackById[trackId]?.toTrackItem() ?: item
                         resolved.add(full)
                     }
+
                     item.mediaId.startsWith(MEDIA_ID_ALBUM_PREFIX) -> {
                         val albumId = item.mediaId.substringAfter(MEDIA_ID_ALBUM_PREFIX)
-                        val tracks = data.tracksByAlbumId[albumId].orEmpty().map { it.toTrackItem() }
+                        val tracks =
+                            data.tracksByAlbumId[albumId].orEmpty().map { it.toTrackItem() }
                         resolved.addAll(tracks)
                     }
+
                     else -> resolved.add(item)
                 }
                 if (originalIndex == startIndex) {
@@ -119,7 +124,11 @@ class UampMediaSessionService : MediaLibraryService() {
             repository.clearCache()
             libraryData = null
             val data = getLibraryData(force = true)
-            (session as? MediaLibrarySession)?.notifyChildrenChanged(MEDIA_ID_ROOT, data.albums.size, null)
+            (session as? MediaLibrarySession)?.notifyChildrenChanged(
+                MEDIA_ID_ROOT,
+                data.albums.size,
+                null
+            )
             SessionResult(SessionResult.RESULT_SUCCESS)
         }
 
@@ -144,8 +153,10 @@ class UampMediaSessionService : MediaLibraryService() {
                 parentId == MEDIA_ID_ROOT -> data.albums.map { it.toAlbumItem() } to true
                 parentId.startsWith(MEDIA_ID_ALBUM_PREFIX) -> {
                     val albumId = parentId.substringAfter(MEDIA_ID_ALBUM_PREFIX)
-                    data.tracksByAlbumId[albumId].orEmpty().map { it.toTrackItem() } to data.albumById.containsKey(albumId)
+                    data.tracksByAlbumId[albumId].orEmpty()
+                        .map { it.toTrackItem() } to data.albumById.containsKey(albumId)
                 }
+
                 else -> emptyList<MediaItem>() to false
             }
             if (!knownParent) {
@@ -167,10 +178,12 @@ class UampMediaSessionService : MediaLibraryService() {
                     val albumId = mediaId.substringAfter(MEDIA_ID_ALBUM_PREFIX)
                     data.albumById[albumId]?.toAlbumItem()
                 }
+
                 mediaId.startsWith(MEDIA_ID_TRACK_PREFIX) -> {
                     val trackId = mediaId.substringAfter(MEDIA_ID_TRACK_PREFIX)
                     data.trackById[trackId]?.toTrackItem()
                 }
+
                 else -> null
             }
             if (item == null) {

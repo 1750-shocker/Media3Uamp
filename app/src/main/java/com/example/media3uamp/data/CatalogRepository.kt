@@ -18,8 +18,10 @@ class CatalogRepository(private val context: Context) {
         .build()
     private val json = Json { ignoreUnknownKeys = true }
 
-    @Volatile private var cache: Catalog? = null
-    @Volatile private var lastFromNetwork: Boolean = false
+    @Volatile
+    private var cache: Catalog? = null
+    @Volatile
+    private var lastFromNetwork: Boolean = false
 
     suspend fun loadCatalog(force: Boolean = false): Catalog = withContext(Dispatchers.IO) {
         if (!force) cache?.let { return@withContext it }
@@ -27,7 +29,7 @@ class CatalogRepository(private val context: Context) {
         val remote = downloadOrNull(REMOTE_URL)
         lastFromNetwork = remote != null
         val text = remote ?: readAssetOrNull(ASSET_FILE)
-        Log.d(TAG, "loadCatalog fromNetwork=$lastFromNetwork textIsNull=${text==null}")
+        Log.d(TAG, "loadCatalog fromNetwork=$lastFromNetwork textIsNull=${text == null}")
         val parsed = json.decodeFromString<Catalog>(text ?: "{\"music\":[]}")
         cache = parsed
         return@withContext parsed
@@ -49,13 +51,9 @@ class CatalogRepository(private val context: Context) {
         }.sortedBy { it.title }
     }
 
-    suspend fun getTracks(albumId: String): List<Track> {
-        val albums = getAlbums()
-        return albums.firstOrNull { it.id == albumId }?.tracks ?: emptyList()
+    fun clearCache() {
+        cache = null
     }
-
-    fun wasLastLoadFromNetwork(): Boolean = lastFromNetwork
-    fun clearCache() { cache = null }
 
     private fun downloadOrNull(url: String): String? = try {
         Log.d(TAG, "download $url")
@@ -64,7 +62,7 @@ class CatalogRepository(private val context: Context) {
             Log.d(TAG, "response code=${resp.code} success=${resp.isSuccessful}")
             if (!resp.isSuccessful) return null
             val body = resp.body?.string()
-            Log.d(TAG, "response body null=${body==null} length=${body?.length}")
+            Log.d(TAG, "response body null=${body == null} length=${body?.length}")
             body
         }
     } catch (e: Exception) {

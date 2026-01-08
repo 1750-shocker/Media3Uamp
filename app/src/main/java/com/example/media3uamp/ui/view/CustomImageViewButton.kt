@@ -26,9 +26,10 @@ class CustomImageViewButton @JvmOverloads constructor(
                 scaleY = 0.95f
                 alpha = baseAlpha * 0.8f
             }
+
             MotionEvent.ACTION_UP,
             MotionEvent.ACTION_CANCEL,
-            -> {
+                -> {
                 scaleX = 1.0f
                 scaleY = 1.0f
                 alpha = baseAlpha

@@ -72,7 +72,8 @@ class PlayerFragment : Fragment() {
             val height = view.height
             if (width <= 0 || height <= 0) return
 
-            val fillColor = MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface)
+            val fillColor =
+                MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface)
             val original = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(original)
             canvas.drawColor(fillColor)
@@ -129,7 +130,11 @@ class PlayerFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentPlayerBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -160,12 +165,14 @@ class PlayerFragment : Fragment() {
             val children = browser.getChildren(parentId, 0, Int.MAX_VALUE, null).await()
             val tracks = children.value ?: emptyList()
             if (tracks.isEmpty()) {
-                Toast.makeText(requireContext(), "该专辑暂无曲目或数据加载失败", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "该专辑暂无曲目或数据加载失败", Toast.LENGTH_SHORT)
+                    .show()
                 bindToController(controller)
                 return@launch
             }
             if (index !in tracks.indices) index = 0
-            val placeholders = tracks.map { item -> MediaItem.Builder().setMediaId(item.mediaId).build() }
+            val placeholders =
+                tracks.map { item -> MediaItem.Builder().setMediaId(item.mediaId).build() }
             controller.setMediaItems(placeholders)
             controller.seekToDefaultPosition(index)
             controller.prepare()
@@ -188,7 +195,8 @@ class PlayerFragment : Fragment() {
             }
         }
         controller.addListener(playerListener!!)
-        binding.playerController.setControllerListener(object : PlayerViewController.PlayerControllerListener {
+        binding.playerController.setControllerListener(object :
+            PlayerViewController.PlayerControllerListener {
             override fun onPlayToggle() {
                 if (controller.isPlaying) controller.pause() else controller.play()
                 updateCoverRotation(controller.playWhenReady)
@@ -211,7 +219,10 @@ class PlayerFragment : Fragment() {
         progressJob?.cancel()
         progressJob = CoroutineScope(Dispatchers.Main).launch {
             while (_binding != null) {
-                binding.playerController.setDurations(controller.currentPosition, controller.duration)
+                binding.playerController.setDurations(
+                    controller.currentPosition,
+                    controller.duration
+                )
                 delay(1000)
             }
         }
@@ -224,7 +235,10 @@ class PlayerFragment : Fragment() {
             startedSheetEnterAnimation = true
             sheet.translationY = sheet.height.toFloat()
             sheet.alpha = 1f
-            val interpolator = AnimationUtils.loadInterpolator(requireContext(), android.R.interpolator.linear_out_slow_in)
+            val interpolator = AnimationUtils.loadInterpolator(
+                requireContext(),
+                android.R.interpolator.linear_out_slow_in
+            )
             sheet.animate()
                 .translationY(0f)
                 .setDuration(320L)
@@ -241,7 +255,8 @@ class PlayerFragment : Fragment() {
 
         sheet.setOnTouchListener { v, event ->
             val b = _binding ?: return@setOnTouchListener false
-            val tracker = swipeVelocityTracker ?: VelocityTracker.obtain().also { swipeVelocityTracker = it }
+            val tracker =
+                swipeVelocityTracker ?: VelocityTracker.obtain().also { swipeVelocityTracker = it }
             tracker.addMovement(event)
 
             when (event.actionMasked) {
@@ -252,6 +267,7 @@ class PlayerFragment : Fragment() {
                     swipeCanStart = event.y < b.playerController.top
                     swipeCanStart
                 }
+
                 MotionEvent.ACTION_MOVE -> {
                     if (!swipeCanStart) return@setOnTouchListener false
                     val dy = event.rawY - swipeDownY
@@ -274,9 +290,10 @@ class PlayerFragment : Fragment() {
                         true
                     }
                 }
+
                 MotionEvent.ACTION_UP,
                 MotionEvent.ACTION_CANCEL,
-                -> {
+                    -> {
                     if (!swipeIsDragging) {
                         swipeVelocityTracker?.recycle()
                         swipeVelocityTracker = null
@@ -295,7 +312,10 @@ class PlayerFragment : Fragment() {
                     val shouldDismiss = v.translationY >= dismissDistance || velocityY > 1600f
 
                     if (shouldDismiss) {
-                        val interpolator = AnimationUtils.loadInterpolator(requireContext(), android.R.interpolator.fast_out_linear_in)
+                        val interpolator = AnimationUtils.loadInterpolator(
+                            requireContext(),
+                            android.R.interpolator.fast_out_linear_in
+                        )
                         v.animate()
                             .translationY(v.height.toFloat())
                             .alpha(0.85f)
@@ -306,7 +326,10 @@ class PlayerFragment : Fragment() {
                             }
                             .start()
                     } else {
-                        val interpolator = AnimationUtils.loadInterpolator(requireContext(), android.R.interpolator.linear_out_slow_in)
+                        val interpolator = AnimationUtils.loadInterpolator(
+                            requireContext(),
+                            android.R.interpolator.linear_out_slow_in
+                        )
                         v.animate()
                             .translationY(0f)
                             .alpha(1f)
@@ -316,6 +339,7 @@ class PlayerFragment : Fragment() {
                     }
                     true
                 }
+
                 else -> false
             }
         }
@@ -345,7 +369,10 @@ class PlayerFragment : Fragment() {
         val md = player.mediaMetadata
         b.title.text = md.title ?: ""
         b.artist.text = md.artist ?: ""
-        md.artworkUri?.let { Glide.with(b.cover).load(it).circleCrop().placeholder(R.drawable.album_placeholder).into(b.cover) }
+        md.artworkUri?.let {
+            Glide.with(b.cover).load(it).circleCrop().placeholder(R.drawable.album_placeholder)
+                .into(b.cover)
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")

@@ -18,7 +18,11 @@ class AlbumsFragment : Fragment() {
     private val vm: AlbumsViewModel by viewModels()
     private lateinit var adapter: AlbumsAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentAlbumsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -32,7 +36,12 @@ class AlbumsFragment : Fragment() {
                 title to "album_${albumId}_title",
                 artist to "album_${albumId}_artist",
             )
-            findNavController().navigate(action, Bundle().apply { putString("albumId", albumId) }, null, extras)
+            findNavController().navigate(
+                action,
+                Bundle().apply { putString("albumId", albumId) },
+                null,
+                extras
+            )
         }
         binding.recycler.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.recycler.adapter = adapter
