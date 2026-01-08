@@ -22,7 +22,11 @@
             app:argType="string" />
         <action
             android:id="@+id/action_to_player"
-            app:destination="@id/playerFragment" />
+            app:destination="@id/playerFragment"
+            app:enterAnim="@anim/no_anim"
+            app:exitAnim="@anim/no_anim"
+            app:popEnterAnim="@anim/no_anim"
+            app:popExitAnim="@anim/no_anim" />
     </fragment>
 
     <fragment

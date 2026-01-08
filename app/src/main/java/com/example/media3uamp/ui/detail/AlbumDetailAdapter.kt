@@ -3,7 +3,6 @@ package com.example.media3uamp.ui.detail
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.view.ViewCompat
 import androidx.media3.common.MediaItem
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -28,9 +27,6 @@ class AlbumDetailAdapter(
 
     inner class VH(private val binding: ItemTrackBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(index: Int, item: MediaItem) {
-            ViewCompat.setTransitionName(binding.title, "track_${albumId}_${index}_title")
-            ViewCompat.setTransitionName(binding.artist, "track_${albumId}_${index}_artist")
-
             val md = item.mediaMetadata
             binding.index.text = (index + 1).toString()
             binding.title.text = md.title ?: ""

@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -54,10 +53,6 @@ class AlbumDetailFragment : Fragment() {
                 putString("trackTitle", item.mediaMetadata.title?.toString())
                 putString("trackArtist", item.mediaMetadata.artist?.toString())
             }
-            val extras = FragmentNavigatorExtras(
-                title to "track_${albumId}_${index}_title",
-                artist to "track_${albumId}_${index}_artist",
-            )
             val rootLoc = IntArray(2)
             val coverLoc = IntArray(2)
             binding.root.getLocationInWindow(rootLoc)
@@ -80,7 +75,7 @@ class AlbumDetailFragment : Fragment() {
                     ),
                 ),
             )
-            findNavController().navigate(R.id.action_to_player, args, null, extras)
+            findNavController().navigate(R.id.action_to_player, args)
         }
         binding.recycler.layoutManager = LinearLayoutManager(requireContext())
         binding.recycler.adapter = adapter

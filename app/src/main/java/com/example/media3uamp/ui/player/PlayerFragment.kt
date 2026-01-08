@@ -8,8 +8,8 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
-import android.transition.TransitionInflater
 import android.view.MotionEvent
+import android.view.animation.AnimationUtils
 import android.view.animation.LinearInterpolator
 import android.view.LayoutInflater
 import android.view.View
@@ -46,12 +46,12 @@ class PlayerFragment : Fragment() {
     private var playerListener: Player.Listener? = null
     private var progressJob: Job? = null
     private var coverAnimator: ObjectAnimator? = null
-    private var startedEnterTransition = false
     private var swipeVelocityTracker: VelocityTracker? = null
     private var swipeDownY = 0f
     private var swipeDownX = 0f
     private var swipeIsDragging = false
     private var swipeCanStart = false
+    private var startedSheetEnterAnimation = false
 
     companion object {
         private var backgroundSnapshot: Bitmap? = null
@@ -103,11 +103,6 @@ class PlayerFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedElementEnterTransition = TransitionInflater.from(requireContext())
-            .inflateTransition(android.R.transition.move)
-        sharedElementReturnTransition = TransitionInflater.from(requireContext())
-            .inflateTransition(android.R.transition.move)
-        postponeEnterTransition()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -120,14 +115,12 @@ class PlayerFragment : Fragment() {
         initCoverAnimator()
         binding.underlaySnapshot.setImageBitmap(backgroundSnapshot)
         backgroundSnapshot = null
+        setupSheetEnterAnimation()
         setupSwipeToDismiss()
         val albumId = requireArguments().getString("albumId") ?: return
         var index = requireArguments().getInt("trackIndex")
         binding.title.text = requireArguments().getString("trackTitle") ?: ""
         binding.artist.text = requireArguments().getString("trackArtist") ?: ""
-        ViewCompat.setTransitionName(binding.title, "track_${albumId}_${index}_title")
-        ViewCompat.setTransitionName(binding.artist, "track_${albumId}_${index}_artist")
-        view.postDelayed({ startEnterTransitionOnce() }, 1200)
 
         CoroutineScope(Dispatchers.Main).launch {
             val browser = PlaybackClient.getBrowser(requireContext())
@@ -176,6 +169,22 @@ class PlayerFragment : Fragment() {
                     delay(1000)
                 }
             }
+        }
+    }
+
+    private fun setupSheetEnterAnimation() {
+        val sheet = binding.sheet
+        sheet.doOnPreDraw {
+            if (startedSheetEnterAnimation) return@doOnPreDraw
+            startedSheetEnterAnimation = true
+            sheet.translationY = sheet.height.toFloat()
+            sheet.alpha = 1f
+            val interpolator = AnimationUtils.loadInterpolator(requireContext(), android.R.interpolator.linear_out_slow_in)
+            sheet.animate()
+                .translationY(0f)
+                .setDuration(320L)
+                .setInterpolator(interpolator)
+                .start()
         }
     }
 
@@ -241,19 +250,23 @@ class PlayerFragment : Fragment() {
                     val shouldDismiss = v.translationY >= dismissDistance || velocityY > 1600f
 
                     if (shouldDismiss) {
+                        val interpolator = AnimationUtils.loadInterpolator(requireContext(), android.R.interpolator.fast_out_linear_in)
                         v.animate()
                             .translationY(v.height.toFloat())
                             .alpha(0.85f)
                             .setDuration(180L)
+                            .setInterpolator(interpolator)
                             .withEndAction {
                                 if (isAdded) findNavController().popBackStack()
                             }
                             .start()
                     } else {
+                        val interpolator = AnimationUtils.loadInterpolator(requireContext(), android.R.interpolator.linear_out_slow_in)
                         v.animate()
                             .translationY(0f)
                             .alpha(1f)
                             .setDuration(180L)
+                            .setInterpolator(interpolator)
                             .start()
                     }
                     true
@@ -288,13 +301,6 @@ class PlayerFragment : Fragment() {
         b.title.text = md.title ?: ""
         b.artist.text = md.artist ?: ""
         md.artworkUri?.let { Glide.with(b.cover).load(it).circleCrop().placeholder(R.drawable.album_placeholder).into(b.cover) }
-        b.root.doOnPreDraw { startEnterTransitionOnce() }
-    }
-
-    private fun startEnterTransitionOnce() {
-        if (startedEnterTransition) return
-        startedEnterTransition = true
-        startPostponedEnterTransition()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -310,7 +316,7 @@ class PlayerFragment : Fragment() {
         swipeVelocityTracker?.recycle()
         swipeVelocityTracker = null
         _binding = null
-        startedEnterTransition = false
+        startedSheetEnterAnimation = false
         super.onDestroyView()
     }
 }
