@@ -10,4 +10,9 @@
     <color name="color_duration">#80FFFFFF</color>
     <color name="lrc_text_color_normal">#80FFFFFF</color>
     <color name="lrc_text_color_checked">#FFFFFF</color>
+
+    <color name="minibar_bg">#5C6271</color>
+    <color name="minibar_mask_bg">#80474F64</color>
+    <color name="transparent_white">#FFFFFF</color>
+    <color name="transparent_white_80">#CCFFFFFF</color>
 </resources>

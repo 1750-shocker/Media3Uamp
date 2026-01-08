@@ -43,7 +43,7 @@ class PlayerViewController @JvmOverloads constructor(
     }
 
     private fun initView(context: Context) {
-        val view = LayoutInflater.from(context).inflate(R.layout.layout_player_controller2, this, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.layout_player_controller, this, false)
         llController = view.findViewById(R.id.ll_controller)
         tvCurDuration = view.findViewById(R.id.tv_current_duration)
         tvDuration = view.findViewById(R.id.tv_duration)

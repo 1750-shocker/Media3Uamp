@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_marginHorizontal="8dp"
+    android:background="@color/minibar_bg"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    tools:ignore="ResourceName">
+
+    <ImageView
+        android:id="@+id/iv_cover_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/iv_mask"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/minibar_mask_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_music_cover"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/px_80"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_album_cover"
+            android:layout_width="@dimen/px_82"
+            android:layout_height="@dimen/px_82"
+            android:layout_marginEnd="-23px"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_player_bar_disk"
+            app:layout_constraintBottom_toBottomOf="@+id/cd_music_cover"
+            app:layout_constraintEnd_toEndOf="@+id/cd_music_cover"
+            app:layout_constraintTop_toTopOf="@+id/cd_music_cover" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cd_music_cover"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/px_16"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_music_cover"
+                android:layout_width="@dimen/px_86"
+                android:layout_height="@dimen/px_86"
+                android:src="@drawable/ic_player_default_cover" />
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/px_38"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/layout_music_cover"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_music_name"
+            android:layout_width="@dimen/px_500"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center|start"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:text="@string/unknown"
+            android:textColor="@color/transparent_white"
+            android:textDirection="locale"
+            android:textSize="36px" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_singer_name"
+            android:layout_width="@dimen/px_315"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/px_6"
+            android:ellipsize="end"
+            android:gravity="center|start"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:text="@string/unknown"
+            android:textColor="@color/transparent_white_80"
+            android:textDirection="locale"
+            android:textSize="26px"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <com.example.media3uamp.ui.view.CustomImageViewButton
+        android:id="@+id/iv_previous"
+        android:layout_width="@dimen/px_54"
+        android:layout_height="@dimen/px_54"
+        android:layout_gravity="center"
+        android:layout_marginEnd="@dimen/px_120"
+        android:layoutDirection="ltr"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icon_previous"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/iv_play"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.example.media3uamp.ui.view.CustomImageViewButton
+        android:id="@+id/iv_play"
+        android:layout_width="@dimen/px_90"
+        android:layout_height="@dimen/px_90"
+        android:layout_gravity="center"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_player_pause"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.example.media3uamp.ui.view.CustomImageViewButton
+        android:id="@+id/iv_next"
+        android:layout_width="@dimen/px_54"
+        android:layout_height="@dimen/px_54"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/px_120"
+        android:layoutDirection="ltr"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icon_next"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_play"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
