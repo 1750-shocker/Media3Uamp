@@ -1,8 +1,10 @@
 package com.example.media3uamp.ui.view
 
 import android.graphics.RectF
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.View
+import androidx.core.graphics.ColorUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
@@ -34,6 +36,13 @@ class MinibarPlayerComponent(
     private var destinationChangedListener: NavController.OnDestinationChangedListener? = null
 
     fun bind() {
+        val surfaceColor = MaterialColors.getColor(minibarBinding.root, com.google.android.material.R.attr.colorSurface)
+        val transparentSurfaceColor = ColorUtils.setAlphaComponent(surfaceColor, 0)
+        minibarBinding.bottomFade.background = GradientDrawable(
+            GradientDrawable.Orientation.TOP_BOTTOM,
+            intArrayOf(transparentSurfaceColor, surfaceColor),
+        )
+
         minibarBinding.ivPrevious.setOnClickListener { controller?.seekToPrevious() }
         minibarBinding.ivNext.setOnClickListener { controller?.seekToNext() }
         minibarBinding.ivPlay.setOnClickListener {
