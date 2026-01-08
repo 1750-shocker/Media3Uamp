@@ -33,8 +33,15 @@
         android:id="@+id/playerFragment"
         android:name="com.example.media3uamp.ui.player.PlayerFragment"
         android:label="播放">
-        <argument android:name="albumId" app:argType="string" />
-        <argument android:name="trackIndex" app:argType="integer" />
+        <argument
+            android:name="albumId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="" />
+        <argument
+            android:name="trackIndex"
+            app:argType="integer"
+            android:defaultValue="0" />
         <argument
             android:name="trackTitle"
             app:argType="string"

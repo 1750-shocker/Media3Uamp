@@ -29,6 +29,7 @@ import com.example.media3uamp.R
 import com.example.media3uamp.databinding.FragmentPlayerBinding
 import com.example.media3uamp.playback.PlaybackClient
 import com.example.media3uamp.ui.view.PlayerViewController
+import com.google.android.material.color.MaterialColors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -63,16 +64,27 @@ class PlayerFragment : Fragment() {
             val bottom: Float,
             val radius: Float,
             val fillColor: Int,
+            val radii: FloatArray? = null,
         )
 
         fun setBackgroundSnapshot(view: View, masks: List<RoundedRectMask> = emptyList()) {
-            val original = view.drawToBitmap(Bitmap.Config.RGB_565).copy(Bitmap.Config.RGB_565, true)
+            val width = view.width
+            val height = view.height
+            if (width <= 0 || height <= 0) return
+
+            val fillColor = MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface)
+            val original = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(original)
+            canvas.drawColor(fillColor)
+            view.draw(canvas)
+
             masks.forEach { mask ->
                 applyRoundedRectMask(
                     bitmap = original,
                     rect = RectF(mask.left, mask.top, mask.right, mask.bottom),
                     radius = mask.radius,
                     fillColor = mask.fillColor,
+                    radii = mask.radii,
                 )
             }
             val maxSide = 1080
@@ -88,14 +100,26 @@ class PlayerFragment : Fragment() {
             backgroundSnapshot = scaled
         }
 
-        private fun applyRoundedRectMask(bitmap: Bitmap, rect: RectF, radius: Float, fillColor: Int) {
+        private fun applyRoundedRectMask(
+            bitmap: Bitmap,
+            rect: RectF,
+            radius: Float,
+            fillColor: Int,
+            radii: FloatArray? = null,
+        ) {
             val canvas = Canvas(bitmap)
             val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
                 style = Paint.Style.FILL
                 color = fillColor
             }
             val full = Path().apply { addRect(rect, Path.Direction.CW) }
-            val round = Path().apply { addRoundRect(rect, radius, radius, Path.Direction.CW) }
+            val round = Path().apply {
+                if (radii != null) {
+                    addRoundRect(rect, radii, Path.Direction.CW)
+                } else {
+                    addRoundRect(rect, radius, radius, Path.Direction.CW)
+                }
+            }
             full.op(round, Path.Op.DIFFERENCE)
             canvas.drawPath(full, paint)
         }
@@ -117,57 +141,78 @@ class PlayerFragment : Fragment() {
         backgroundSnapshot = null
         setupSheetEnterAnimation()
         setupSwipeToDismiss()
-        val albumId = requireArguments().getString("albumId") ?: return
-        var index = requireArguments().getInt("trackIndex")
-        binding.title.text = requireArguments().getString("trackTitle") ?: ""
-        binding.artist.text = requireArguments().getString("trackArtist") ?: ""
+        val albumId = requireArguments().getString("albumId").orEmpty()
+        val hasAlbumId = albumId.isNotBlank()
+        var index = requireArguments().getInt("trackIndex", 0)
+        requireArguments().getString("trackTitle")?.let { binding.title.text = it }
+        requireArguments().getString("trackArtist")?.let { binding.artist.text = it }
 
         CoroutineScope(Dispatchers.Main).launch {
-            val browser = PlaybackClient.getBrowser(requireContext())
             val controller = PlaybackClient.getController(requireContext())
             player = controller
+            if (!hasAlbumId) {
+                bindToController(controller)
+                return@launch
+            }
+
+            val browser = PlaybackClient.getBrowser(requireContext())
             val parentId = "album:$albumId"
             val children = browser.getChildren(parentId, 0, Int.MAX_VALUE, null).await()
             val tracks = children.value ?: emptyList()
             if (tracks.isEmpty()) {
                 Toast.makeText(requireContext(), "该专辑暂无曲目或数据加载失败", Toast.LENGTH_SHORT).show()
+                bindToController(controller)
                 return@launch
             }
             if (index !in tracks.indices) index = 0
-            val placeholders = tracks.map { item ->
-                MediaItem.Builder().setMediaId(item.mediaId).build()
-            }
+            val placeholders = tracks.map { item -> MediaItem.Builder().setMediaId(item.mediaId).build() }
             controller.setMediaItems(placeholders)
             controller.seekToDefaultPosition(index)
             controller.prepare()
             controller.play()
-            updateMetadata(controller)
-            _binding?.playerController?.setDurations(controller.currentPosition, controller.duration)
-            updateCoverRotation(controller.playWhenReady)
-            playerListener = object : Player.Listener {
-                override fun onEvents(player: Player, events: Player.Events) {
-                    updateMetadata(player)
-                    _binding?.playerController?.setDurations(player.currentPosition, player.duration)
-                    _binding?.playerController?.setPlaying(player.playWhenReady)
-                    updateCoverRotation(player.playWhenReady)
-                }
-            }
-            controller.addListener(playerListener!!)
-            binding.playerController.setControllerListener(object :
-                PlayerViewController.PlayerControllerListener {
-                override fun onPlayToggle() { if (controller.isPlaying) controller.pause() else controller.play(); updateCoverRotation(controller.playWhenReady) }
-                override fun onPreviousClick() { controller.seekToPrevious() }
-                override fun onNextClick() { controller.seekToNext() }
-                override fun onSeekTo(progress: Int) { controller.seekTo(progress.toLong()) }
-            })
-            binding.playerController.setPlaying(controller.playWhenReady)
+            bindToController(controller)
+        }
+    }
 
-            progressJob?.cancel()
-            progressJob = CoroutineScope(Dispatchers.Main).launch {
-                while (_binding != null) {
-                    binding.playerController.setDurations(controller.currentPosition, controller.duration)
-                    delay(1000)
-                }
+    private fun bindToController(controller: Player) {
+        updateMetadata(controller)
+        _binding?.playerController?.setDurations(controller.currentPosition, controller.duration)
+        _binding?.playerController?.setPlaying(controller.playWhenReady)
+        updateCoverRotation(controller.playWhenReady)
+        playerListener = object : Player.Listener {
+            override fun onEvents(player: Player, events: Player.Events) {
+                updateMetadata(player)
+                _binding?.playerController?.setDurations(player.currentPosition, player.duration)
+                _binding?.playerController?.setPlaying(player.playWhenReady)
+                updateCoverRotation(player.playWhenReady)
+            }
+        }
+        controller.addListener(playerListener!!)
+        binding.playerController.setControllerListener(object : PlayerViewController.PlayerControllerListener {
+            override fun onPlayToggle() {
+                if (controller.isPlaying) controller.pause() else controller.play()
+                updateCoverRotation(controller.playWhenReady)
+            }
+
+            override fun onPreviousClick() {
+                controller.seekToPrevious()
+            }
+
+            override fun onNextClick() {
+                controller.seekToNext()
+            }
+
+            override fun onSeekTo(progress: Int) {
+                controller.seekTo(progress.toLong())
+            }
+        })
+        binding.playerController.setPlaying(controller.playWhenReady)
+
+        progressJob?.cancel()
+        progressJob = CoroutineScope(Dispatchers.Main).launch {
+            while (_binding != null) {
+                binding.playerController.setDurations(controller.currentPosition, controller.duration)
+                delay(1000)
             }
         }
     }

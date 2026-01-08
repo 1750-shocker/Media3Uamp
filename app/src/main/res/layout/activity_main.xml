@@ -30,4 +30,15 @@
         app:navGraph="@navigation/nav_graph"
         app:defaultNavHost="true" />
 
+    <include
+        android:id="@+id/minibar"
+        layout="@layout/layout_minibar_player_controller"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
