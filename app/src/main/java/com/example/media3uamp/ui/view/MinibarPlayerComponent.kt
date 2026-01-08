@@ -19,6 +19,7 @@ import com.google.android.material.color.MaterialColors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import jp.wasabeef.glide.transformations.BlurTransformation
 
 class MinibarPlayerComponent(
     private val activity: AppCompatActivity,
@@ -111,6 +112,7 @@ class MinibarPlayerComponent(
                 .into(minibarBinding.ivMusicCover)
             Glide.with(minibarBinding.ivCoverBg)
                 .load(artworkUri)
+                .transform(BlurTransformation(23, 4))
                 .into(minibarBinding.ivCoverBg)
         }
     }

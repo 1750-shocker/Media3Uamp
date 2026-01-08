@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.guava)
     // Images
     implementation(libs.glide)
+    implementation(libs.glide.transformations)
     // UI
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
