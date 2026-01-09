@@ -16,6 +16,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Media3Uamp">
+        <provider
+            android:name=".data.AlbumArtContentProvider"
+            android:authorities="com.example.media3uamp.albumart"
+            android:exported="false"
+            android:grantUriPermissions="true" />
         <service
             android:name=".playback.UampMediaSessionService"
             android:exported="true"
