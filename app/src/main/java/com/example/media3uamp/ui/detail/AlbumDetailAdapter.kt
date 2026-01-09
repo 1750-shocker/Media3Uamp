@@ -31,7 +31,10 @@ class AlbumDetailAdapter(
             binding.index.text = (index + 1).toString()
             binding.title.text = md.title ?: ""
             binding.artist.text = md.artist ?: ""
-            val sec = md.extras?.getInt("durationSec") ?: 0
+            val extras = md.extras
+            val sec = extras?.getInt("durationSec")
+                ?: ((extras?.getLong("durationMs") ?: 0L).coerceAtLeast(0L) / 1000L)
+                    .coerceAtMost(Int.MAX_VALUE.toLong()).toInt()
             binding.duration.text = formatDuration(sec)
             binding.card.setOnClickListener { onClick(index, item, binding.title, binding.artist) }
         }

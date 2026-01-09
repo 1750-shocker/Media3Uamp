@@ -75,7 +75,9 @@ internal class JsonSource @Inject constructor(
             .setExtras(
                 Bundle().apply {
                     putString(ORIGINAL_ARTWORK_URI_KEY, artworkRemote?.toString())
-                    putLong("durationMs", duration ?: 0L)
+                    val durationSec = (duration ?: 0L).coerceAtLeast(0L)
+                    putInt("durationSec", durationSec.coerceAtMost(Int.MAX_VALUE.toLong()).toInt())
+                    putLong("durationMs", durationSec * 1000L)
                 }
             )
             .build()
