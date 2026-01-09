@@ -8,13 +8,10 @@ import android.os.Bundle
 import android.os.Build
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
-import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.LibraryResult
 import androidx.media3.session.MediaLibraryService
-import androidx.media3.session.MediaLibraryService.LibraryParams
-import androidx.media3.session.MediaLibraryService.MediaLibrarySession
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSession.MediaItemsWithStartPosition
 import androidx.media3.session.SessionCommand
@@ -36,9 +33,11 @@ class UampMediaSessionService : MediaLibraryService() {
     private lateinit var repository: CatalogRepository
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val libraryDataMutex = Mutex()
+
     @Volatile
     private var libraryData: LibraryData? = null
 
+    @UnstableApi
     override fun onCreate() {
         super.onCreate()
         player = ExoPlayer.Builder(this).build()
@@ -89,7 +88,7 @@ class UampMediaSessionService : MediaLibraryService() {
                         val full = data.trackById[trackId]?.toTrackItem() ?: item
                         resolved.add(full)
                     }
-
+                    //把专辑下的 tracks 展开成很多个 track item（这就是“点专辑播放=顺序播放整张专辑”的实现）
                     item.mediaId.startsWith(MEDIA_ID_ALBUM_PREFIX) -> {
                         val albumId = item.mediaId.substringAfter(MEDIA_ID_ALBUM_PREFIX)
                         val tracks =
@@ -160,7 +159,7 @@ class UampMediaSessionService : MediaLibraryService() {
                 else -> emptyList<MediaItem>() to false
             }
             if (!knownParent) {
-                LibraryResult.ofError(LibraryResult.RESULT_ERROR_BAD_VALUE)
+                LibraryResult.ofError(SessionError.ERROR_BAD_VALUE)
             } else {
                 LibraryResult.ofItemList(items, params)
             }
@@ -187,7 +186,7 @@ class UampMediaSessionService : MediaLibraryService() {
                 else -> null
             }
             if (item == null) {
-                LibraryResult.ofError(LibraryResult.RESULT_ERROR_BAD_VALUE)
+                LibraryResult.ofError(SessionError.ERROR_BAD_VALUE)
             } else {
                 LibraryResult.ofItem(item, null)
             }
