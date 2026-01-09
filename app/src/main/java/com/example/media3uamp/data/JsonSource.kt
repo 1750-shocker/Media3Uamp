@@ -6,9 +6,11 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import androidx.core.net.toUri
+import javax.inject.Inject
 
 
-internal class JsonSource(
+internal class JsonSource @Inject constructor(
     private val repository: CatalogRepository
 ) : AbstractMusicSource() {
     companion object {
@@ -95,7 +97,7 @@ internal class JsonSource(
         if (s.isNullOrBlank()) return null
         val fixed = s.replace(" ", "%20")
         return try {
-            Uri.parse(fixed)
+            fixed.toUri()
         } catch (_: Exception) {
             null
         }

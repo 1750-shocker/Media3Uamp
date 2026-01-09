@@ -13,7 +13,9 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.media3uamp.databinding.ActivityMainBinding
 import com.example.media3uamp.ui.view.MinibarPlayerComponent
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var minibarComponent: MinibarPlayerComponent? = null

@@ -2,21 +2,23 @@ package com.example.media3uamp.data
 
 import android.content.Context
 import android.util.Log
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.logging.HttpLoggingInterceptor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class CatalogRepository(private val context: Context) {
-    private val client = OkHttpClient.Builder()
-        .addInterceptor(HttpLoggingInterceptor { msg -> Log.d(TAG, msg) }
-            .apply { level = HttpLoggingInterceptor.Level.BASIC })
-        .build()
-    private val json = Json { ignoreUnknownKeys = true }
+@Singleton
+class CatalogRepository @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val client: OkHttpClient,
+    private val json: Json,
+) {
 
     @Volatile
     private var cache: Catalog? = null

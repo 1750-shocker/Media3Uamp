@@ -16,22 +16,30 @@ import androidx.media3.session.SessionError
 import androidx.media3.session.SessionResult
 import com.example.media3uamp.data.BrowseTree
 import com.example.media3uamp.data.CatalogRepository
-import com.example.media3uamp.data.JsonSource
 import com.example.media3uamp.data.MEDIA_ID_ALBUM_PREFIX
 import com.example.media3uamp.data.MEDIA_ID_ROOT
 import com.example.media3uamp.data.MEDIA_ID_TRACK_PREFIX
+import com.example.media3uamp.data.MusicSource
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.guava.future
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class UampMediaSessionService : MediaLibraryService() {
-    private lateinit var player: ExoPlayer
     private lateinit var session: MediaLibrarySession
-    private lateinit var repository: CatalogRepository
-    private lateinit var musicSource: JsonSource
+    @Inject
+    lateinit var player: ExoPlayer
+
+    @Inject
+    lateinit var repository: CatalogRepository
+
+    @Inject
+    lateinit var musicSource: MusicSource
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val browseTreeMutex = Mutex()
 
@@ -41,9 +49,6 @@ class UampMediaSessionService : MediaLibraryService() {
     @UnstableApi
     override fun onCreate() {
         super.onCreate()
-        player = ExoPlayer.Builder(this).build()
-        repository = CatalogRepository(this)
-        musicSource = JsonSource(repository)
         session = MediaLibrarySession.Builder(this, player, LibraryCallback()).build()
         createNotificationChannel()
     }

@@ -18,7 +18,9 @@ import com.google.android.material.color.MaterialColors
 import com.example.media3uamp.R
 import com.example.media3uamp.databinding.FragmentAlbumDetailBinding
 import com.example.media3uamp.ui.player.PlayerFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AlbumDetailFragment : Fragment() {
     private var _binding: FragmentAlbumDetailBinding? = null
     private val binding get() = _binding!!
