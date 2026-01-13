@@ -27,7 +27,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.media3uamp.R
 import com.example.media3uamp.databinding.FragmentPlayerBinding
-import com.example.media3uamp.playback.PlaybackClient
+import com.example.media3uamp.playback.PlaybackConnectionManager
 import com.example.media3uamp.ui.view.PlayerViewController
 import com.google.android.material.color.MaterialColors
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,6 +37,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.guava.await
+import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -55,6 +56,9 @@ class PlayerFragment : Fragment() {
     private var swipeIsDragging = false
     private var swipeCanStart = false
     private var startedSheetEnterAnimation = false
+
+    @Inject
+    lateinit var playbackConnectionManager: PlaybackConnectionManager
 
     companion object {
         private var backgroundSnapshot: Bitmap? = null
@@ -155,14 +159,14 @@ class PlayerFragment : Fragment() {
         requireArguments().getString("trackArtist")?.let { binding.artist.text = it }
 
         CoroutineScope(Dispatchers.Main).launch {
-            val controller = PlaybackClient.getController(requireContext())
+            val controller = playbackConnectionManager.getController()
             player = controller
             if (!hasAlbumId) {
                 bindToController(controller)
                 return@launch
             }
 
-            val browser = PlaybackClient.getBrowser(requireContext())
+            val browser = playbackConnectionManager.getBrowser()
             val parentId = "album:$albumId"
             val children = browser.getChildren(parentId, 0, Int.MAX_VALUE, null).await()
             val tracks = children.value ?: emptyList()

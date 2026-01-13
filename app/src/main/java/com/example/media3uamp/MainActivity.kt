@@ -12,13 +12,18 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.media3uamp.databinding.ActivityMainBinding
+import com.example.media3uamp.playback.PlaybackConnectionManager
 import com.example.media3uamp.ui.view.MinibarPlayerComponent
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var minibarComponent: MinibarPlayerComponent? = null
+
+    @Inject
+    lateinit var playbackConnectionManager: PlaybackConnectionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +46,7 @@ class MainActivity : AppCompatActivity() {
             navHostFragmentId = R.id.nav_host,
             navHostView = binding.navHost,
             playerDestinationId = R.id.playerFragment,
+            playbackConnectionManager = playbackConnectionManager,
         ).also { it.bind() }
 
         if (android.os.Build.VERSION.SDK_INT >= 33) {

@@ -15,13 +15,14 @@ import javax.inject.Singleton
 
 @Singleton
 class CatalogRepository @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
     private val client: OkHttpClient,
     private val json: Json,
 ) {
 
     @Volatile
     private var cache: Catalog? = null
+
     @Volatile
     private var lastFromNetwork: Boolean = false
 

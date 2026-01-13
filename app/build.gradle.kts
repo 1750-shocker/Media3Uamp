@@ -41,6 +41,13 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    testOptions {
+        unitTests.all {
+            it.testLogging {
+                showStandardStreams = true
+            }
+        }
+    }
 }
 
 dependencies {

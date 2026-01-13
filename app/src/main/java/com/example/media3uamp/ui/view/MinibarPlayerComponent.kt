@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.media3uamp.R
 import com.example.media3uamp.databinding.LayoutMinibarPlayerControllerBinding
-import com.example.media3uamp.playback.PlaybackClient
+import com.example.media3uamp.playback.PlaybackConnectionManager
 import com.example.media3uamp.ui.player.PlayerFragment
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.color.MaterialColors
@@ -30,6 +30,7 @@ class MinibarPlayerComponent(
     private val navHostFragmentId: Int,
     private val navHostView: View,
     private val playerDestinationId: Int,
+    private val playbackConnectionManager: PlaybackConnectionManager,
 ) {
     private var controller: MediaController? = null
     private var controllerListener: Player.Listener? = null
@@ -72,7 +73,7 @@ class MinibarPlayerComponent(
             }.also { navController.addOnDestinationChangedListener(it) }
 
         CoroutineScope(Dispatchers.Main).launch {
-            val controller = PlaybackClient.getController(activity)
+            val controller = playbackConnectionManager.getController()
             this@MinibarPlayerComponent.controller = controller
             controllerListener?.let { controller.removeListener(it) }
             controllerListener = object : Player.Listener {
