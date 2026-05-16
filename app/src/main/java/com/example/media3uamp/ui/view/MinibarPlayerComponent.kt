@@ -58,7 +58,7 @@ class MinibarPlayerComponent(
             if (minibarBinding.root.visibility != View.VISIBLE) return@OnClickListener
             val snapshotView = resolveSnapshotView()
             val masks = createRoundedCoverMasks(snapshotView)
-            PlayerFragment.Companion.setBackgroundSnapshot(snapshotView, masks)
+            PlayerFragment.setBackgroundSnapshot(snapshotView, masks)
             navController.navigate(playerDestinationId, Bundle.EMPTY)
         }
         minibarBinding.layoutMusicCover.setOnClickListener(openPlayerClickListener)

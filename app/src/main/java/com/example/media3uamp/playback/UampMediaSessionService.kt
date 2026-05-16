@@ -29,6 +29,9 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 
+/**
+ * 这个房子的核心使命，就是 把“播放器 (Player)”和“中间人 (MediaSession)”绑定在一起，并对外开门营业，等待各种拿着 MediaController 遥控器的人来连接。
+ */
 @AndroidEntryPoint
 class UampMediaSessionService : MediaLibraryService() {
     private lateinit var session: MediaLibrarySession

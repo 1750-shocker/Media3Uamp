@@ -9,6 +9,7 @@ import com.example.media3uamp.data.MusicSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ServiceComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ServiceScoped
 import dagger.hilt.components.SingletonComponent
@@ -36,7 +37,7 @@ object AppModule {
 }
 
 @Module
-@InstallIn(dagger.hilt.android.components.ServiceComponent::class)
+@InstallIn(ServiceComponent::class)
 object ServiceModule {
     @Provides
     @ServiceScoped
